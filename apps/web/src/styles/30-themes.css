@@ -1,0 +1,306 @@
+/* ── 30 主题系统（深夜书房=深色默认 / 宣纸白昼=浅色） ─────────────────────
+   切换机制：html[data-theme='light'] 覆盖设计令牌；硬编码深色的关键组件在此定点回写。
+   浅色主题延续品牌「宣纸米白」方向：纸面微暖、墨字、朱砂/洒金不变。 */
+:root {
+  color-scheme: dark;
+}
+html[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f2ecdf;
+  --bg-soft: #eae2d2;
+  --bg-panel: #f7f2e8;
+  --bg-raised: #fdf9f1;
+  --border: #ded2bc;
+  --border-strong: #c8ba9f;
+  --text: #332d24;
+  --text-dim: #6f6553;
+  --text-faint: #a2957f;
+  --shadow-1: 0 1px 2px rgba(80, 66, 44, 0.12);
+  --shadow-2: 0 6px 24px -6px rgba(80, 66, 44, 0.18), 0 2px 6px rgba(80, 66, 44, 0.1);
+  --shadow-3: 0 18px 50px -12px rgba(80, 66, 44, 0.28), 0 4px 14px rgba(80, 66, 44, 0.12);
+}
+/* 硬编码深色的关键组件定点回写（浅色） */
+html[data-theme='light'] .status-bar {
+  background: linear-gradient(180deg, #efe8d9, #e6ddca);
+}
+html[data-theme='light'] .prompt-input,
+html[data-theme='light'] .pet-pos-bar {
+  background: linear-gradient(180deg, #fbf7ee, #f1eadb);
+}
+html[data-theme='light'] .modal-mask,
+html[data-theme='white'] .modal-mask {
+  background: rgba(64, 52, 34, 0.38);
+}
+html[data-theme='light'] .composer-webai,
+html[data-theme='white'] .composer-webai {
+  color: #8a3a2f;
+}
+html[data-theme='light'] .composer-hint,
+html[data-theme='white'] .composer-hint {
+  color: #8a3a2f;
+  background: rgba(224, 72, 62, 0.08);
+}
+html[data-theme='light'] .welcome::before,
+html[data-theme='white'] .welcome::before {
+  opacity: 0.25;
+}
+
+/* Agent 执行指示器（.ari 混凝土板）：板影/肌理随主题回写（主色 --ari-accent 走令牌自动切换） */
+html[data-theme='light'] .ari {
+  --ari-slab1: rgba(80, 66, 44, 0.3);
+  --ari-slab2: rgba(80, 66, 44, 0.2);
+  --ari-slab3: rgba(80, 66, 44, 0.12);
+  --ari-stripe: rgba(80, 66, 44, 0.05);
+  --ari-stripe2: rgba(80, 66, 44, 0.09);
+}
+html[data-theme='white'] .ari {
+  --ari-slab1: rgba(0, 0, 0, 0.18);
+  --ari-slab2: rgba(0, 0, 0, 0.12);
+  --ari-slab3: rgba(0, 0, 0, 0.07);
+  --ari-stripe: rgba(0, 0, 0, 0.04);
+  --ari-stripe2: rgba(0, 0, 0, 0.07);
+}
+html[data-theme='aurora'] .ari {
+  --ari-slab2: rgba(30, 52, 60, 0.5);
+  --ari-slab3: rgba(56, 90, 98, 0.35);
+}
+
+/* 设置中心「外观」：主题卡片 */
+.theme-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.theme-card {
+  position: relative;
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+  border-radius: var(--r-lg);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font-family: inherit;
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
+}
+.theme-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+.theme-card.on {
+  border-color: rgba(208, 167, 90, 0.65);
+  box-shadow: 0 0 0 3px rgba(208, 167, 90, 0.14);
+}
+.theme-swatch {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--border-strong);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+  padding: 7px;
+  overflow: hidden;
+}
+.theme-swatch i {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+}
+.swatch-dark {
+  background: linear-gradient(160deg, #1a1713, #0e0d0b);
+}
+.swatch-dark i:nth-child(1) { background: #e0483e; width: 40%; }
+.swatch-dark i:nth-child(2) { background: #d0a75a; width: 65%; }
+.swatch-dark i:nth-child(3) { background: #3c352b; width: 85%; }
+.swatch-light {
+  background: linear-gradient(160deg, #f7f2e8, #eae2d2);
+}
+.swatch-light i:nth-child(1) { background: #e0483e; width: 40%; }
+.swatch-light i:nth-child(2) { background: #c89b4a; width: 65%; }
+.swatch-light i:nth-child(3) { background: #c8ba9f; width: 85%; }
+.theme-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.theme-card-info b {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.theme-card-info i {
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+.theme-card-check {
+  margin-left: auto;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* 日志面板收进可视化栏：工作列压缩而非全宽 */
+.layout-panel .work-panel {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+}
+.layout-panel .log-panel {
+  height: 260px;
+  animation: log-panel-in 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* 纯白主题（中性极简）：与宣纸白昼共享硬编码回写，仅色板不同 */
+html[data-theme='white'] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --bg-soft: #f5f5f7;
+  --bg-panel: #ffffff;
+  --bg-raised: #ffffff;
+  --border: #e4e4e8;
+  --border-strong: #d2d2d8;
+  --text: #202024;
+  --text-dim: #5d5d66;
+  --text-faint: #94949e;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-2: 0 6px 24px -6px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  --shadow-3: 0 18px 50px -12px rgba(0, 0, 0, 0.2), 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+html[data-theme='white'] .status-bar {
+  background: linear-gradient(180deg, #ffffff, #f4f4f6);
+}
+html[data-theme='white'] .prompt-input,
+html[data-theme='white'] .pet-pos-bar {
+  background: linear-gradient(180deg, #ffffff, #fafafa);
+}
+html[data-theme='white'] .theme-card {
+  background: #ffffff;
+}
+
+/* 浅色系（宣纸/纯白）阴影柔和化：输入栏下方渐变带与日志面板顶影 */
+html[data-theme='light'] .chat-input-row,
+html[data-theme='white'] .chat-input-row {
+  background: linear-gradient(180deg, transparent, rgba(80, 66, 44, 0.05));
+}
+html[data-theme='light'] .log-panel,
+html[data-theme='white'] .log-panel {
+  box-shadow: 0 -10px 28px rgba(80, 66, 44, 0.1);
+}
+
+/* 纯白主题卡片色板 */
+.swatch-white {
+  background: linear-gradient(160deg, #ffffff, #ececef);
+}
+.swatch-white i:nth-child(1) { background: #e0483e; width: 40%; }
+.swatch-white i:nth-child(2) { background: #b98c3e; width: 65%; }
+.swatch-white i:nth-child(3) { background: #d2d2d8; width: 85%; }
+
+/* 极光黑（冷黑基底 + 极光青绿）：深夜书房的冷色姊妹版。
+   品牌朱砂仅保留在错误语义与印章标识；主行动色走 --accent（极光绿），高亮走 --gold（极光青） */
+html[data-theme='aurora'] {
+  color-scheme: dark;
+  --bg: #0a0d10;
+  --bg-soft: #0e1316;
+  --bg-panel: #11171b;
+  --bg-raised: #151d22;
+  --border: #1f2b32;
+  --border-strong: #2c3d46;
+  --text: #d9e6e8;
+  --text-dim: #86a0a6;
+  --text-faint: #567077;
+  --accent: #10b981;
+  --accent-hover: #34d399;
+  --accent-soft: rgba(16, 185, 129, 0.15);
+  --ok: #34d399;
+  --ok-soft: rgba(52, 211, 153, 0.14);
+  --gold: #40e0d0;
+  --gold-soft: rgba(64, 224, 208, 0.14);
+}
+html[data-theme='aurora'] .status-bar {
+  background: linear-gradient(180deg, #10161a, #0b0f12);
+}
+html[data-theme='aurora'] .prompt-input,
+html[data-theme='aurora'] .pet-pos-bar {
+  background: linear-gradient(180deg, #131a1f, #0d1215);
+}
+.swatch-aurora {
+  background: linear-gradient(160deg, #131a1f, #0a0d10);
+}
+.swatch-aurora i:nth-child(1) { background: #10b981; width: 40%; }
+.swatch-aurora i:nth-child(2) { background: #40e0d0; width: 65%; }
+.swatch-aurora i:nth-child(3) { background: #2c3d46; width: 85%; }
+
+/* 自定义强调/高亮色（外观设置）：控件本身中性，随主题变量走 */
+.accent-picker {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--bg-raised);
+}
+.accent-picker-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+.accent-picker-head b {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.accent-picker-head i {
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+.accent-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.accent-picker-input {
+  width: 44px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+.accent-picker-input::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+.accent-picker-input::-webkit-color-swatch {
+  border-radius: 6px;
+  border: none;
+}
+.accent-picker-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.accent-picker-reset {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 4px 10px;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.accent-picker-reset:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}

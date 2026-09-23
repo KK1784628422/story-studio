@@ -1,0 +1,23 @@
+{
+  "name": "@story-studio/tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@story-studio/shared": "workspace:*",
+    "@story-studio/skills": "workspace:*",
+    "ai": "^7.0.79",
+    "fast-glob": "^3.3.2",
+    "ws": "^8.18.0",
+    "zod": "^4.1.8"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.13"
+  }
+}

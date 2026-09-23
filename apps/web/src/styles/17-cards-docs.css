@@ -1,0 +1,585 @@
+/* ── 17 资料卡墙 + 文档弹窗 + Markdown 基底 ──────────────────── */
+.cards-view {
+  padding: 16px 18px 30px;
+}
+
+.cards-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.cards-count {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+
+.cards-loading,
+.cards-empty {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 13px;
+  line-height: 2;
+}
+.cards-empty.small {
+  padding: 24px;
+  font-size: 12px;
+}
+
+.card-group {
+  margin-bottom: 22px;
+}
+.card-group-title {
+  font-family: var(--font-kai);
+  font-size: 14.5px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-group-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.doc-card {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  border-radius: var(--r-md);
+  padding: 11px 13px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text);
+  transition: border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+}
+.doc-card:hover {
+  border-color: rgba(208, 167, 90, 0.45);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+.doc-card:active {
+  transform: translateY(0);
+}
+
+.doc-card-kind {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 1px;
+  color: var(--text-faint);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  text-transform: uppercase;
+}
+.doc-card-kind.json {
+  color: var(--warn);
+  border-color: rgba(217, 154, 61, 0.4);
+  background: var(--warn-soft);
+}
+
+.doc-card-title {
+  font-size: 13px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.6em;
+}
+
+.doc-card-file {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── 角色卡·猎魔人风格（参考 头像卡片设计.txt：金角边框 + 魔法灵光 + Medallion 头像 + 悬停震动） ── */
+.card-grid:has(.doc-card.char) {
+  grid-template-columns: repeat(auto-fill, minmax(216px, 1fr));
+  gap: 14px;
+}
+.doc-card.char {
+  position: relative;
+  /* 悬停大图预览在卡片上方展开——不能裁剪 */
+  overflow: visible;
+  min-height: 300px;
+  align-items: center;
+  padding: 18px 14px 12px;
+  gap: 12px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 50% 24%, color-mix(in srgb, var(--gold) 7%, transparent) 0%, transparent 55%),
+    var(--bg-panel);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35), inset 0 0 24px rgba(0, 0, 0, 0.28);
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s;
+}
+.doc-card.char:hover {
+  z-index: 30; /* 大图预览压过相邻卡片 */
+}
+/* 皮革细纹质感 */
+.doc-card.char::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.07) 0 2px, transparent 2px 4px);
+  opacity: 0.5;
+}
+/* 魔法灵光（hover 显现）——伪元素压 z-0，实体内容各自 z-1 */
+.doc-card.char::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--gold) 16%, transparent) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+.doc-card.char::after {
+  z-index: 0;
+}
+/* 实体内容统一抬到纹理/灵光之上（不用 > * 通配——它会覆盖 .wc-expand 的 absolute 定位） */
+.wc-title,
+.wc-medal,
+.wc-stats,
+.wc-expand {
+  position: relative;
+  z-index: 1;
+}
+/* 四角装饰：hover 展开成完整边框 */
+.wc-corner {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--gold);
+  opacity: 0.55;
+  z-index: 2;
+  transition: all 0.35s var(--ease);
+}
+.wc-corner.tl {
+  top: 7px;
+  left: 7px;
+  border-right: none;
+  border-bottom: none;
+}
+.wc-corner.tr {
+  top: 7px;
+  right: 7px;
+  border-left: none;
+  border-bottom: none;
+}
+.wc-corner.bl {
+  bottom: 7px;
+  left: 7px;
+  border-right: none;
+  border-top: none;
+}
+.wc-corner.br {
+  bottom: 7px;
+  right: 7px;
+  border-left: none;
+  border-top: none;
+}
+.doc-card.char:hover {
+  transform: translateY(-6px);
+  border-color: rgba(208, 167, 90, 0.85);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(208, 167, 90, 0.18);
+}
+.doc-card.char:hover::before {
+  opacity: 1;
+}
+.doc-card.char:hover .wc-corner {
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  opacity: 1;
+  border-color: rgba(208, 167, 90, 0.4);
+}
+/* 标题（金底分隔线，hover 辉光） */
+.wc-title {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-kai);
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 7px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.25s var(--ease), text-shadow 0.25s var(--ease);
+}
+.doc-card.char:hover .wc-title {
+  text-shadow: 0 0 12px rgba(208, 167, 90, 0.55);
+}
+/* Medallion 头像（hover 放大 + 高频微震） */
+.wc-medal {
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid currentColor;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), inset 0 0 14px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.wc-medal img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wc-medal b {
+  font-size: 38px;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font-kai);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.doc-card.char:hover .wc-medal {
+  transform: scale(1.05);
+}
+/* 悬停：卡片内部上方展开大图（覆盖标题/徽章区，高度动画；金角框 z-2 在外圈保持可见） */
+.wc-expand {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  z-index: 1;
+  transition: height 0.32s var(--ease), opacity 0.25s var(--ease);
+}
+.wc-expand img,
+.wc-expand b {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 96px;
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--font-kai);
+}
+/* 底部渐隐衔接卡片本体 + 名字标注 */
+.wc-expand::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44px;
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-panel) 85%, transparent));
+}
+.wc-expand i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8px;
+  text-align: center;
+  font-style: normal;
+  font-family: var(--font-kai);
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+.doc-card.char:hover .wc-expand {
+  height: 190px;
+  opacity: 1;
+}
+/* 属性行（文件 / 大小 / 更新） */
+.wc-stats {
+  width: 100%;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+}
+.wc-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  padding: 4px 0;
+}
+.wc-stat:last-child {
+  border-bottom: none;
+}
+.wc-stat i {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+}
+.wc-stat b {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .doc-card.char,
+  .doc-card.char .wc-medal {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* 文档弹窗 */
+.doc-modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 7, 5, 0.66);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-doc-modal);
+  animation: mask-in var(--t-fast) var(--ease);
+}
+
+.doc-modal {
+  width: min(860px, 92vw);
+  height: min(82vh, 900px);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  animation: pop-in var(--t-med) var(--ease);
+}
+
+.doc-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.doc-modal-file {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--gold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.doc-edit-toggle,
+.doc-edit-actions .drawer-close {
+  flex: none;
+}
+.doc-edit-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+/* 作者手工「标记免检」勾选（正文保存时显示） */
+.dw-approved {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 3px 8px;
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm, 6px);
+  user-select: none;
+}
+.dw-approved:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+.dw-approved input {
+  accent-color: var(--gold);
+}
+.doc-readonly-badge {
+  font-size: 10.5px;
+  color: var(--text-faint);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 10px;
+  flex: none;
+}
+
+.doc-modal-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.doc-modal-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 24px 28px;
+}
+.doc-modal-edit {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px;
+}
+.doc-modal-textarea {
+  flex: 1;
+  min-height: 0;
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.8;
+  padding: 12px 14px;
+  resize: none;
+  outline: none;
+}
+.doc-modal-textarea:focus {
+  border-color: var(--accent);
+}
+.doc-msg {
+  font-size: 12px;
+  color: var(--ok);
+  padding: 6px 18px 12px;
+}
+
+/* Markdown 基底（文档弹窗/编辑器预览/报告共用） */
+.markdown-body {
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: var(--text);
+}
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4 {
+  margin: 1.1em 0 0.5em;
+  line-height: 1.4;
+}
+.markdown-body h1 {
+  font-size: 1.4em;
+  font-family: var(--font-kai);
+  letter-spacing: 1px;
+}
+.markdown-body h2 {
+  font-size: 1.22em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+.markdown-body h3 {
+  font-size: 1.1em;
+  color: var(--gold);
+}
+.markdown-body h4 {
+  font-size: 1em;
+}
+.markdown-body p {
+  margin: 0.55em 0;
+}
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 1.6em;
+  margin: 0.5em 0;
+}
+.markdown-body li {
+  margin: 0.3em 0;
+}
+.markdown-body blockquote {
+  margin: 0.7em 0;
+  padding: 8px 16px;
+  border-left: 3px solid var(--gold);
+  background: rgba(208, 167, 90, 0.06);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  color: var(--text-dim);
+}
+.markdown-body code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--gold);
+}
+.markdown-body pre {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.markdown-body pre code {
+  background: transparent;
+  padding: 0;
+  color: var(--text);
+}
+.markdown-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.7em 0;
+  font-size: 12.5px;
+}
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid var(--border-strong);
+  padding: 7px 11px;
+  text-align: left;
+}
+.markdown-body th {
+  background: var(--bg-raised);
+}
+.markdown-body hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.1em 0;
+}
+.markdown-body a {
+  color: var(--gold);
+}

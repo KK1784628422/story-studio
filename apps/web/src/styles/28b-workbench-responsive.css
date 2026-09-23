@@ -1,0 +1,89 @@
+/* ── 28b 四栏响应式 ──────────────────────────────────────────── */
+@media (max-width: 1500px) {
+  .sidepanel {
+    width: 190px;
+  }
+  .explorer {
+    width: 214px;
+  }
+  .layout-chat {
+    flex-basis: clamp(300px, 32%, 420px);
+  }
+}
+
+@media (max-width: 1280px) {
+  .sidepanel {
+    width: 176px;
+  }
+  .explorer {
+    width: 198px;
+  }
+  .sp-sub {
+    display: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  /* 窄屏收纳两翼（活动栏按钮仍可切换模式/打开设置等弹层） */
+  .sidepanel,
+  .explorer {
+    display: none;
+  }
+  .layout-chat {
+    flex: 0 0 clamp(280px, 36%, 400px);
+  }
+}
+
+@media (max-width: 960px) {
+  .workspace {
+    flex-direction: column;
+  }
+  /* 活动栏变横向模式条 */
+  .activitybar {
+    width: 100%;
+    height: 48px;
+    flex-direction: row;
+    padding: 0 10px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .ab-brand {
+    margin: 0 10px 0 0;
+    font-size: 15px;
+    padding: 4px 0;
+  }
+  .ab-group {
+    flex-direction: row;
+  }
+  .ab-modes {
+    margin: 0 0 0 8px;
+  }
+  .ab-bottom {
+    margin: 0 0 0 auto;
+    padding: 0;
+    border-top: none;
+    flex-direction: row;
+  }
+  .ab-btn.active::before {
+    left: 50%;
+    top: auto;
+    bottom: -9px;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+  }
+  /* 上下堆叠：聊天 45% / 可视化 55% */
+  .layout-chat {
+    flex: 0 0 45%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .layout-panel {
+    flex: 1;
+  }
+  .left-rail {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+  }
+}

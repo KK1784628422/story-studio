@@ -1,0 +1,17 @@
+# 统一换行符：仓库内存 LF，检出时按平台处理（避免 Windows 提交把整仓变成 CRLF）
+* text=auto eol=lf
+
+# 二进制资源不做换行转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.mp3 binary
+*.mp4 binary
+*.woff binary
+*.woff2 binary
+
+# 锁文件在 merge 时不参与 diff（减少冲突噪音）
+pnpm-lock.yaml -diff

@@ -1,0 +1,589 @@
+/* ── 08b 输入栏「+」功能菜单 / 附件 / @文件引用 / 网页AI胶囊 ── */
+.prompt-input.drag-over {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px var(--gold-soft), var(--shadow-2);
+}
+.composer-main {
+  display: flex;
+  flex-direction: column;
+}
+.composer-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 10px 10px 0;
+}
+/* @ 引用标签：textarea 保持原生输入，其后叠一层同排版高亮层画彩色胶囊底 */
+.composer-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+.composer-row textarea {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 8px 4px 6px;
+  min-height: 42px;
+  overflow-wrap: break-word;
+}
+.composer-highlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  color: transparent;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.65;
+  padding: 8px 4px 6px;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+.composer-chip {
+  background: rgba(208, 167, 90, 0.16);
+  box-shadow: 0 0 0 1px rgba(208, 167, 90, 0.38);
+  border-radius: 6px;
+}
+.composer-plus-wrap {
+  position: relative;
+  flex: none;
+  align-self: center;
+}
+.composer-plus {
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 19px;
+  line-height: 1;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
+    background var(--t-fast) var(--ease);
+}
+.composer-plus:hover {
+  color: var(--gold);
+  border-color: var(--gold-soft);
+  background: rgba(255, 255, 255, 0.05);
+}
+.composer-plus.on {
+  color: var(--gold);
+  border-color: var(--gold-soft);
+  background: var(--gold-soft);
+}
+.composer-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  min-width: 224px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: var(--shadow-3);
+  padding: 6px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.composer-menu-item {
+  appearance: none;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  transition: background var(--t-fast) var(--ease);
+}
+.composer-menu-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.composer-menu-label {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+}
+.composer-menu-desc {
+  color: var(--text-faint);
+  font-size: 11px;
+}
+.composer-attach-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 12px 0;
+}
+.composer-attach {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 4px 6px;
+}
+.composer-attach-img {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.composer-attach-name {
+  color: var(--text);
+  font-size: 11px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.composer-attach-x {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px;
+  border-radius: 4px;
+}
+.composer-attach-x:hover {
+  color: #e0483e;
+}
+.composer-webai {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin: 10px 12px 0;
+  background: linear-gradient(180deg, rgba(224, 72, 62, 0.18), rgba(224, 72, 62, 0.1));
+  border: 1px solid rgba(224, 72, 62, 0.45);
+  color: #ffd9c9;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.composer-webai-x {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 0;
+  line-height: 1;
+}
+.composer-webai-x:hover {
+  color: #ffffff;
+}
+/* 网页AI胶囊内嵌站点/模型下拉 */
+.composer-webai-select {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid rgba(224, 72, 62, 0.45);
+  background: rgba(224, 72, 62, 0.14);
+  color: #ffd9c9;
+  border-radius: 999px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  max-width: 130px;
+}
+.composer-webai-select:hover {
+  background: rgba(224, 72, 62, 0.24);
+}
+.composer-webai-select:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.composer-webai-select option {
+  background: #1c1917;
+  color: #ffd9c9;
+}
+/* 内联提示条（附件超限/跳过等，4s 自动消失） */
+.composer-hint {
+  margin: 8px 12px 0;
+  align-self: flex-start;
+  color: #ffd9c9;
+  background: rgba(224, 72, 62, 0.12);
+  border: 1px solid rgba(224, 72, 62, 0.4);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  animation: rp-bar-in 0.25s var(--ease);
+}
+.composer-at {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: calc(100% + 6px);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: var(--shadow-3);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.composer-at-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-strong);
+}
+.composer-at-prefix {
+  color: var(--gold);
+  font-weight: 700;
+}
+.composer-at-input input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  outline: none;
+  font-size: 13px;
+}
+.composer-at-list {
+  overflow-y: auto;
+  max-height: 240px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.composer-at-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: left;
+}
+.composer-at-item:hover,
+.composer-at-item.hl {
+  background: rgba(255, 255, 255, 0.07);
+}
+.composer-at-name {
+  color: var(--text);
+  font-size: 12.5px;
+  flex: none;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.composer-at-path {
+  color: var(--text-faint);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.composer-at-empty {
+  padding: 12px;
+  color: var(--text-faint);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ── 网页AI生图面板（人物头像）：必选人物 + 可选风格 → 发送生图指令 ── */
+.composer-avatar {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: calc(100% + 6px);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  box-shadow: var(--shadow-3);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: rp-bar-in 0.25s var(--ease);
+}
+.composer-avatar-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-strong);
+}
+.composer-avatar-head b {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gold);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.composer-avatar-head > span {
+  flex: 1;
+  color: var(--text-faint);
+  font-size: 11.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.composer-avatar-x {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.composer-avatar-x:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+.composer-avatar-sec {
+  padding: 10px 12px 6px;
+}
+.composer-avatar-label {
+  display: block;
+  color: var(--text-dim);
+  font-size: 11.5px;
+  margin-bottom: 7px;
+}
+.composer-avatar-chars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 132px;
+  overflow-y: auto;
+}
+.composer-avatar-empty {
+  color: var(--text-faint);
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 4px 0;
+}
+.composer-avatar-char {
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 12px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+.composer-avatar-char:hover {
+  color: var(--text);
+  border-color: var(--text-faint);
+}
+.composer-avatar-char.on {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: var(--gold-soft);
+}
+.composer-avatar-char.style {
+  font-size: 11.5px;
+  padding: 3px 10px;
+}
+.composer-avatar-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border-strong);
+}
+.composer-avatar-hint {
+  color: var(--text-faint);
+  font-size: 11.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.composer-avatar-actions {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+.composer-avatar-cancel {
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 12px;
+  padding: 5px 14px;
+  cursor: pointer;
+}
+.composer-avatar-cancel:hover {
+  color: var(--text);
+}
+.composer-avatar-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 8px;
+  background: var(--gold);
+  color: #14120f;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 5px 16px;
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.composer-avatar-go:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+.composer-avatar-go:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.prompt-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 10px 9px 12px;
+}
+
+.prompt-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.prompt-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+/* 参考图：模型/思考档位 = 无边框粗体文字 + 小箭头（去掉外框感） */
+.prompt-select-label {
+  display: none;
+}
+.prompt-select select {
+  appearance: none;
+  background: transparent url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a89d8a' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 7px center;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 5px 22px 5px 9px;
+  max-width: 190px;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.prompt-select select:hover {
+  background-color: rgba(255, 255, 255, 0.055);
+  color: var(--gold);
+}
+.prompt-select select:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.prompt-select option {
+  background: var(--bg-panel);
+  color: var(--text);
+}
+
+/* 免费池模型徽标（多账号 key 轮询，429 自动切换不中断对话） */
+.model-free-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: #5bd6a8;
+  border: 1px solid rgba(91, 214, 168, 0.5);
+  background: rgba(91, 214, 168, 0.12);
+  border-radius: 999px;
+  padding: 1px 6px;
+  margin-left: 2px;
+  line-height: 1.5;
+  flex: none;
+}
+
+/* 圆形发送钮（白底墨箭头，参考图） */
+.btn-send {
+  appearance: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffffff, #efe9dc);
+  color: #17130f;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+  box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.5);
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease),
+    filter var(--t-fast) var(--ease);
+}
+.btn-send:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.55);
+}
+.btn-send:active {
+  transform: scale(0.94);
+}
+.btn-send:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+  filter: grayscale(0.4);
+}
+
+/* 停止钮：同尺寸圆钮（绯底方块） */
+.btn-stop {
+  appearance: none;
+  border: 1px solid rgba(242, 85, 73, 0.55);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bad-soft);
+  color: var(--bad);
+  font-size: 12px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+  animation: pending-pulse 1.6s ease-in-out infinite;
+  transition: transform var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.btn-stop:hover {
+  background: rgba(242, 85, 73, 0.22);
+  transform: scale(1.06);
+}
+.btn-stop:active {
+  transform: scale(0.94);
+}

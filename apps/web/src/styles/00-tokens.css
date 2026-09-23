@@ -1,0 +1,55 @@
+/* ── 00 设计令牌 ─────────────────────────────────────────────── */
+:root {
+  /* 纸墨色阶（暖黑 → 宣纸白） */
+  --bg: #0e0d0b;
+  --bg-soft: #14120f;
+  --bg-panel: #1a1713;
+  --bg-raised: #201c17;
+  --border: #2a251f;
+  --border-strong: #3c352b;
+
+  --text: #eae3d6;
+  --text-dim: #a89d8a;
+  --text-faint: #6f675a;
+
+  /* 朱砂（品牌/主行动）· 玉青（成功）· 洒金（高亮）· 琥珀（警示）· 绯（错误） */
+  --accent: #e0483e;
+  --accent-hover: #f05a4e;
+  --accent-soft: rgba(224, 72, 62, 0.13);
+  --ok: #5aa87c;
+  --ok-soft: rgba(90, 168, 124, 0.13);
+  --gold: #d0a75a;
+  --gold-soft: rgba(208, 167, 90, 0.14);
+  --warn: #d99a3d;
+  --warn-soft: rgba(217, 154, 61, 0.14);
+  --bad: #f25549;
+  --bad-soft: rgba(242, 85, 73, 0.13);
+
+  /* 字体族：楷（品牌展示）· 宋（阅读）· 黑（正文）· 码（日志/编辑） */
+  --font-kai: 'KaiTi', 'Kaiti SC', 'STKaiti', '楷体', 'Noto Serif SC', serif;
+  --font-serif: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --font-body: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif;
+  --font-mono: 'Cascadia Code', 'JetBrains Mono', Consolas, 'Courier New', monospace;
+
+  /* 圆角 · 阴影 · 运动 */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 6px 24px -6px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.35);
+  --shadow-3: 0 18px 50px -12px rgba(0, 0, 0, 0.7), 0 4px 14px rgba(0, 0, 0, 0.4);
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --t-fast: 0.16s;
+  --t-med: 0.28s;
+
+  /* z 序谱（全局唯一事实源） */
+  --z-drawer: 30;
+  --z-reader-overlay: 31;
+  --z-reader-panel: 32;
+  --z-doc-modal: 60;
+  --z-welcome: 60;
+  --z-welcome-overlay: 70;
+  --z-toast: 80;
+  --z-modal: 100;
+}

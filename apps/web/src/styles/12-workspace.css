@@ -1,0 +1,168 @@
+/* ── 12 工作区容器 ───────────────────────────────────────────── */
+.work-panel {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(1200px 500px at 85% -10%, rgba(208, 167, 90, 0.05), transparent 60%),
+    var(--bg);
+}
+
+.wp-tabs {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+
+.wp-view-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.wp-tab {
+  appearance: none;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  padding: 6px 14px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.wp-tab:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.045);
+}
+.wp-tab:active {
+  transform: scale(0.96);
+}
+.wp-tab.active {
+  color: var(--text);
+  background: var(--bg-raised);
+  border-color: var(--border-strong);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+.wp-tab.small {
+  font-size: 11.5px;
+  padding: 4px 11px;
+}
+
+.wp-doc-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-left: 1px solid var(--border);
+  padding-left: 12px;
+}
+.wp-doc-tab {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--t-fast) var(--ease);
+}
+.wp-doc-tab:hover {
+  color: var(--text-dim);
+}
+.wp-doc-tab.active {
+  color: var(--gold);
+}
+.wp-doc-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gold);
+}
+
+.wp-reader-opts {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.follow-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  user-select: none;
+}
+.follow-toggle input {
+  accent-color: var(--accent);
+}
+
+.wp-chip {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  border-radius: 999px;
+  padding: 3px 11px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.wp-body {
+  flex: 1;
+  min-height: 0;
+}
+.wp-body.view-reader {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+.wp-body.view-cards,
+.wp-body.view-tracking,
+.wp-body.view-import,
+.wp-body.view-report {
+  display: block;
+  overflow: hidden;
+}
+
+.wp-phone-wrap {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+}
+.wp-body.with-editor .wp-phone-wrap {
+  border-right: 1px solid var(--border);
+}
+
+.wp-cards-wrap {
+  height: 100%;
+  overflow-y: auto;
+}
+.wp-body.view-workflow {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}

@@ -1,0 +1,149 @@
+/* ── 13 手机壳（全屏化 + 4px 纤细黑边：机身即屏幕，状态栏随阅读器主题同色） ── */
+.phone {
+  width: 390px;
+  max-width: 100%;
+  height: min(800px, 100%);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-shrink: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  border: 4px solid #0a0a0a;
+  border-radius: 28px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
+  /* 底色与阅读器浅色主题一致；:has 精确匹配三主题（状态栏行与内容同色、无缝衔接） */
+  background: #f7f2e7;
+}
+.phone:has(.reader.theme-light) {
+  background: #f7f2e7;
+}
+.phone:has(.reader.theme-sepia) {
+  background: #efe0c4;
+}
+.phone:has(.reader.theme-dark) {
+  background: #0c0c0e;
+}
+
+/* 状态栏：装饰仿真（时间 / 灵动岛摄像头 / 信号 / 4G / 电量百分比），底色随主题、文字色同步适配 */
+.phone-statusbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px 5px;
+  font-size: 11px;
+  color: #7a6f5c;
+  flex-shrink: 0;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+/* 灵动岛：居中黑胶囊 + 摄像头镜点（纯装饰） */
+.phone-island {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  transform: translateX(-50%);
+  width: 62px;
+  height: 17px;
+  background: #0a0a0a;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5px;
+}
+.phone-cam {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #182635;
+  box-shadow: inset 0 0 1.5px rgba(110, 150, 220, 0.65);
+}
+.phone:has(.reader.theme-sepia) .phone-statusbar {
+  color: #867351;
+}
+.phone:has(.reader.theme-dark) .phone-statusbar {
+  color: rgba(255, 255, 255, 0.62);
+}
+.ps-time {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-family: var(--font-mono);
+}
+.ps-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ps-signal {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1.5px;
+}
+.ps-signal i {
+  width: 3px;
+  border-radius: 1px;
+  background: currentColor;
+}
+.ps-signal i:nth-child(1) {
+  height: 4px;
+}
+.ps-signal i:nth-child(2) {
+  height: 6px;
+}
+.ps-signal i:nth-child(3) {
+  height: 8px;
+}
+.ps-signal i:nth-child(4) {
+  height: 10px;
+}
+.ps-net {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.ps-batt {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.ps-batt-body {
+  position: relative;
+  display: block;
+  width: 21px;
+  height: 11px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 1.5px;
+  opacity: 0.9;
+}
+.ps-batt-body::after {
+  content: '';
+  position: absolute;
+  right: -3.5px;
+  top: 2.5px;
+  width: 2px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 0 1.5px 1.5px 0;
+}
+.ps-batt-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: currentColor;
+  border-radius: 1px;
+}
+.ps-batt-pct {
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+}
+
+/* 屏幕：铺满机身剩余空间，无自带底色/描边（阅读器主题即屏幕颜色） */
+.phone-screen {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}

@@ -1,0 +1,17 @@
+/* ── 22.5 发送钮路由期风车 ──
+   （原「路由等待桌宠」条状 UI 已升级为常驻桌宠：见 22c-pet-mascot.css + chat/PetMascot.tsx + chat/usePetState.ts；
+   本文件仅保留发送按钮在路由期的风车 spinner，供 ChatComposer.busy 态使用） */
+.btn-send .send-spinner {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(14, 13, 11, 0.25);
+  border-top-color: var(--bg);
+  animation: rp-spin 0.7s linear infinite;
+}
+@keyframes rp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

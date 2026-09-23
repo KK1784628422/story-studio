@@ -1,0 +1,392 @@
+/* ── 04 模型设置弹窗 ─────────────────────────────────────────── */
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 7, 5, 0.66);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  animation: mask-in var(--t-fast) var(--ease);
+}
+
+.settings-modal {
+  width: 520px;
+  max-width: 92vw;
+  max-height: 84vh;
+  overflow-y: auto;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-3);
+  animation: pop-in var(--t-med) var(--ease);
+}
+
+/* 模型设置弹窗头（作用域限定，避免与阅读器浮层头同名互相覆盖） */
+.settings-modal .settings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 14.5px;
+  position: sticky;
+  top: 0;
+  background: var(--bg-panel);
+  z-index: 1;
+}
+
+.settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 20px 22px;
+}
+
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.settings-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.4px;
+}
+
+.settings-radios {
+  display: flex;
+  gap: 16px;
+}
+
+.radio-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.radio-inline input {
+  accent-color: var(--accent);
+}
+
+.settings-select,
+.settings-input {
+  width: 100%;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-size: 13px;
+  padding: 9px 12px;
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.settings-input:focus,
+.settings-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.settings-input::placeholder {
+  color: var(--text-faint);
+}
+
+.settings-msg {
+  font-size: 12.5px;
+  color: var(--gold);
+}
+
+/* Provider 高级配置：折叠区（默认收起）+ 输入/快捷档位组合 */
+.settings-adv-fold {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.settings-adv-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-size: 13px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease);
+}
+.settings-adv-toggle:hover {
+  border-color: var(--accent);
+}
+.settings-adv-chevron {
+  display: inline-block;
+  color: var(--text-dim);
+  font-size: 11px;
+  transition: transform var(--t-fast) var(--ease);
+}
+.settings-adv-chevron.open {
+  transform: rotate(90deg);
+}
+.settings-adv-summary {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.settings-adv-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 2px 2px 0;
+}
+.settings-adv-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.settings-chip-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.settings-chip {
+  font-size: 12px;
+  color: var(--text-dim);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+.settings-chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.settings-chip.on {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+/* 采样参数滑条行：名称 + 滑条 + 范围提示 + 当前值 */
+.settings-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.settings-slider-name {
+  flex: 0 0 76px;
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.3px;
+}
+.settings-slider-row .settings-input {
+  flex: 1;
+  min-width: 0;
+}
+.settings-slider {
+  flex: 1;
+  min-width: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  /* --fill 由组件 inline 注入：accent 填充到当前值，其余为边框色 */
+  background: linear-gradient(to right, var(--accent) var(--fill, 50%), var(--border) var(--fill, 50%));
+  outline: none;
+  cursor: pointer;
+}
+.settings-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-panel);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+  cursor: grab;
+  transition: transform var(--t-fast) var(--ease);
+}
+.settings-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+.settings-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+}
+.settings-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-panel);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+  cursor: grab;
+}
+.settings-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--accent) var(--fill, 50%), var(--border) var(--fill, 50%));
+}
+.settings-slider-range {
+  flex: 0 0 auto;
+  font-size: 11px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.settings-slider-value {
+  flex: 0 0 44px;
+  text-align: right;
+  font-size: 12.5px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 浏览器偏好区块 */
+.settings-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 0 14px;
+}
+.settings-browser {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.settings-hint {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-faint);
+}
+.settings-browser-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.settings-detected {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  background: var(--gold-soft);
+  border: 1px solid rgba(208, 167, 90, 0.35);
+  border-radius: var(--r-md);
+  padding: 8px 12px;
+  line-height: 1.6;
+}
+.settings-detected b {
+  color: var(--gold);
+}
+
+/* baseURL 与官方模板不一致的警示条（401 常见根因提示） */
+.settings-warn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #f2b04d;
+  background: rgba(242, 176, 77, 0.09);
+  border: 1px solid rgba(242, 176, 77, 0.35);
+  border-radius: var(--r-md);
+  padding: 8px 12px;
+  margin: -4px 0 2px 96px;
+}
+
+.settings-editing-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--gold);
+  border: 1px solid rgba(208, 167, 90, 0.45);
+  border-radius: 999px;
+  padding: 1px 7px;
+  margin-left: 7px;
+  vertical-align: 1px;
+}
+
+/* 免费池徽标（多账号 key 自动轮询，429 自动切换） */
+.settings-free-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #5bd6a8;
+  border: 1px solid rgba(91, 214, 168, 0.45);
+  background: rgba(91, 214, 168, 0.1);
+  border-radius: 999px;
+  padding: 1px 7px;
+  margin-left: 7px;
+  vertical-align: 1px;
+}
+
+/* 免费池多 key 输入区 */
+.settings-textarea {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.6;
+  resize: vertical;
+  min-height: 76px;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-soft);
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.settings-item:hover {
+  border-color: var(--border-strong);
+}
+.settings-item.active {
+  border-color: rgba(224, 72, 62, 0.45);
+  background: var(--accent-soft);
+}
+
+.settings-item-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.settings-item-info b {
+  font-size: 13px;
+}
+.settings-item-info span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-item-actions {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}

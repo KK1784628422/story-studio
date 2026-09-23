@@ -1,0 +1,35 @@
+{
+  "name": "story-studio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "sync-skills": "node scripts/sync-skills.mjs",
+    "dev": "pnpm --filter @story-studio/server dev",
+    "dev:web": "pnpm --filter @story-studio/web dev",
+    "dev:music": "npx -y NeteaseCloudMusicApi@latest",
+    "build": "pnpm --filter @story-studio/web build",
+    "build:desktop": "pnpm --filter @story-studio/desktop build",
+    "dev:desktop": "concurrently -k -n web,desktop -c green,magenta \"pnpm --filter @story-studio/web dev\" \"wait-on tcp:127.0.0.1:5173 && pnpm build:desktop && electron apps/desktop\"",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "agent-browser": "^0.35.0",
+    "concurrently": "^10.0.5",
+    "electron": "^44.0.0",
+    "electron-builder": "^26.15.3",
+    "sharp": "^0.35.4",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.3",
+    "wait-on": "^9.1.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "NeteaseCloudMusicApi@4.32.0": "patches/NeteaseCloudMusicApi@4.32.0.patch"
+    }
+  }
+}

@@ -1,0 +1,117 @@
+/* ── 26 响应式 ───────────────────────────────────────────────── */
+@media (max-width: 1280px) {
+  .layout {
+    grid-template-columns: 44% 56%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .tracking-notes {
+    grid-template-columns: 1fr;
+  }
+  .imp-form {
+    grid-template-columns: 1fr;
+  }
+  .log-drawer {
+    width: min(520px, calc(100vw - 24px));
+  }
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 46%) minmax(0, 54%);
+  }
+  .layout-chat {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px 12px;
+    row-gap: 6px;
+  }
+  .topbar-left {
+    min-width: 0;
+  }
+  .mode-pills {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .mode-pill {
+    flex: none;
+  }
+  .session-drawer {
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+  .rp-list {
+    width: 200px;
+  }
+  .wp-body.with-editor {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .wp-body.with-editor .wp-phone-wrap {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    flex: none;
+  }
+  .welcome-brand {
+    font-size: 34px;
+    letter-spacing: 6px;
+  }
+  .welcome-sub {
+    padding-left: 0;
+  }
+  .welcome-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 640px) {
+  .layout {
+    grid-template-rows: minmax(0, 42%) minmax(0, 58%);
+  }
+  .chat-messages {
+    padding: 12px 10px 8px;
+  }
+  .msg-user .msg-text {
+    margin-left: 12px;
+  }
+  .phone {
+    width: 100%;
+    border-radius: 24px;
+  }
+  .rp-list {
+    width: 150px;
+  }
+  .rp-markdown {
+    padding: 14px 16px 30px;
+  }
+  .settings-modal {
+    max-width: 94vw;
+  }
+  .drawer-head {
+    padding: 8px 8px 8px;
+  }
+}
+
+/* 触控设备：放大可点目标 */
+@media (pointer: coarse) {
+  .mode-pill,
+  .wp-tab,
+  .btn-ghost,
+  .rb-btn,
+  .rt-btn {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}

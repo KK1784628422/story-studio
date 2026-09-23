@@ -1,0 +1,148 @@
+/* ── 03 抽屉：会话 / 书架 / 日志 ─────────────────────────────── */
+.session-drawer {
+  position: absolute;
+  top: 52px;
+  right: 12px;
+  width: 320px;
+  max-height: 50vh;
+  overflow-y: auto;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-3);
+  z-index: var(--z-drawer);
+  padding: 8px;
+  animation: drawer-drop var(--t-med) var(--ease);
+}
+
+.session-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  text-align: left;
+  color: var(--text);
+  font-size: 13px;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.session-item:hover {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: var(--border);
+}
+.session-item.current {
+  background: var(--accent-soft);
+  border-color: rgba(224, 72, 62, 0.35);
+  cursor: default;
+}
+.session-item:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.session-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+}
+
+.session-meta {
+  flex: none;
+  font-size: 11px;
+  color: var(--text-faint);
+  display: inline-flex;
+  align-items: center;
+}
+
+.session-empty {
+  padding: 22px 14px;
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+
+.log-drawer {
+  width: 520px;
+}
+
+.log-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.log-line {
+  display: flex;
+  gap: 10px;
+  padding: 4px 8px;
+  border-radius: var(--r-sm);
+  line-height: 1.55;
+}
+.log-line:hover {
+  background: rgba(255, 255, 255, 0.035);
+}
+.log-time {
+  flex: none;
+  color: var(--text-faint);
+}
+.log-msg {
+  word-break: break-all;
+  color: var(--text-dim);
+}
+.log-warn .log-msg {
+  color: var(--warn);
+}
+.log-error .log-msg {
+  color: var(--bad);
+}
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px 10px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.drawer-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+}
+
+.drawer-close {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 14px;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.drawer-close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}

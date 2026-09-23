@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.local/
+*.log
+.story-spaces/
+
+# Python 缓存（vendor 技能脚本运行时产生）
+__pycache__/
+
+# 运行时产物（本地日志/服务器临时目录）
+logs/
+.story-studio/

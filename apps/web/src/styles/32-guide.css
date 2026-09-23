@@ -1,0 +1,374 @@
+/* ── 32 创作指南：教学弹窗（GuideModal）+ 分步教学指引（GuideTour） ─────────
+   弹窗风格对齐设置中心（bg-panel / 金色点缀 / pop 入场）；
+   Tour 聚光 = spot 巨型 box-shadow 遮罩 + 金色描边呼吸，卡片自动落位。 */
+
+/* ═══ 教学弹窗 ═══ */
+.guide-hub {
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 92vw);
+  height: min(640px, 88vh);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  animation: guide-pop 0.34s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes guide-pop {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.guide-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.guide-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.guide-sub {
+  flex: 1;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+.guide-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* 章节 */
+.guide-sec h3 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: 14.5px;
+  font-weight: 700;
+}
+.guide-sec h3 i {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: var(--r-sm);
+  padding: 1px 6px;
+  opacity: 0.9;
+}
+
+/* 五步卡片 */
+.guide-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.guide-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+.guide-step-no {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: var(--r-full);
+  background: var(--gold-soft);
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+}
+.guide-step b {
+  color: var(--text);
+  font-size: 13px;
+}
+.guide-step p {
+  margin: 3px 0 0;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  line-height: 1.75;
+}
+
+/* 模式速查表 */
+.guide-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.guide-table th {
+  padding: 7px 10px;
+  text-align: left;
+  color: var(--text-faint);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-strong);
+}
+.guide-table td {
+  padding: 8px 10px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.6;
+}
+.guide-td-mode {
+  color: var(--gold) !important;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.guide-td-when {
+  white-space: nowrap;
+}
+
+/* 段落与技巧 */
+.guide-p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  line-height: 1.9;
+}
+.guide-p b,
+.guide-p code {
+  color: var(--gold);
+}
+.guide-p code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  background: var(--gold-soft);
+  border-radius: var(--r-sm);
+  padding: 1px 6px;
+}
+.guide-tips {
+  margin: 0;
+  padding: 0 0 0 2px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.guide-tips li {
+  position: relative;
+  padding-left: 16px;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  line-height: 1.75;
+}
+.guide-tips li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--r-full);
+  background: var(--gold);
+  opacity: 0.7;
+}
+
+/* 底栏 */
+.guide-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.guide-foot-hint {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+.guide-foot-actions {
+  display: flex;
+  gap: 10px;
+}
+.guide-tour-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--gold);
+  color: #14120f;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.guide-tour-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+
+/* ═══ 分步教学指引（Tour） ═══ */
+.gtour {
+  position: fixed;
+  inset: 0;
+  z-index: 120; /* 高于 modal(100) 与 toast(80)：教学指引始终置顶 */
+}
+.gt-blocker {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+.gt-dim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: rgba(10, 9, 7, 0.62);
+  animation: gt-fade 0.3s var(--ease);
+}
+.gt-spot {
+  position: fixed;
+  z-index: 2;
+  border-radius: var(--r-md);
+  border: 2px solid var(--gold);
+  box-shadow:
+    0 0 0 200vmax rgba(10, 9, 7, 0.62),
+    0 0 18px rgba(208, 167, 90, 0.35);
+  pointer-events: none;
+  transition: all 0.38s cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation: gt-breathe 2.4s ease-in-out infinite;
+}
+@keyframes gt-breathe {
+  0%, 100% { box-shadow: 0 0 0 200vmax rgba(10, 9, 7, 0.62), 0 0 12px rgba(208, 167, 90, 0.28); }
+  50% { box-shadow: 0 0 0 200vmax rgba(10, 9, 7, 0.62), 0 0 26px rgba(208, 167, 90, 0.5); }
+}
+@keyframes gt-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 步骤卡片 */
+.gt-card {
+  position: fixed;
+  z-index: 3;
+  padding: 14px 16px 13px;
+  background: var(--bg-panel);
+  border: 1px solid var(--gold);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-3);
+  animation: guide-pop 0.3s var(--ease);
+}
+.gt-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.gt-step-no {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  background: var(--gold-soft);
+  border-radius: 999px;
+  padding: 2px 9px;
+}
+.gt-skip {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease);
+}
+.gt-skip:hover {
+  color: var(--text);
+}
+.gt-title {
+  margin: 0 0 6px;
+  color: var(--text);
+  font-size: 14.5px;
+  font-weight: 700;
+}
+.gt-desc {
+  margin: 0 0 12px;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+.gt-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.gt-dots {
+  display: flex;
+  gap: 5px;
+}
+.gt-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border-strong);
+  transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.gt-dots i.done {
+  background: var(--gold);
+  opacity: 0.45;
+}
+.gt-dots i.on {
+  background: var(--gold);
+  transform: scale(1.35);
+}
+.gt-btns {
+  display: flex;
+  gap: 8px;
+}
+.gt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+.gt-btn:hover {
+  color: var(--text);
+  border-color: var(--text-faint);
+}
+.gt-btn.primary {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: #14120f;
+  font-weight: 700;
+}
+.gt-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-2);
+}
+
+/* 减弱动态：呼吸与弹跳关闭 */
+@media (prefers-reduced-motion: reduce) {
+  .gt-spot { transition: none; animation: none; }
+  .gt-card, .guide-hub { animation: none; }
+  .gt-dim { animation: none; }
+}

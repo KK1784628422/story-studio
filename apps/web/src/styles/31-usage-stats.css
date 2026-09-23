@@ -1,0 +1,471 @@
+/* ── 31 模型使用统计（设置中心「统计」页签） ─────────────────────────
+   参考样式：Token 消耗统计仪表盘（活动热力图 / 每日 Token 趋势曲线 / 模型占比环 / 统计卡片 / 模式分布表）。
+   组件：components/UsageStats.tsx；数据源 GET /api/usage/stats。
+   动效：曲线描画(dashoffset) / 占比环扫描(dasharray 过渡) / 卡片数字滚动(rAF) / 表格行渐入 / 悬停明细浮层(.us-tip)。 */
+.usage-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.us-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.us-head b {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.us-head span {
+  font-size: 12px;
+  color: var(--text-faint);
+}
+.us-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 12px 14px;
+}
+.us-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+/* 模型占比环 + 任务类型分布表：同行网格 */
+.us-charts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr);
+  gap: 14px;
+  align-items: stretch;
+}
+.us-chart-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.us-chart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+/* 每日 Token 趋势曲线 */
+.us-curve-wrap {
+  position: relative;
+}
+.us-curve {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.us-curve-path {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.us-cursor-line {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+  pointer-events: none;
+}
+.us-curve-dot {
+  stroke: var(--bg-panel);
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+.us-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  opacity: 0.7;
+}
+.us-axis {
+  fill: var(--text-dim);
+  font-size: 13px;
+  font-family: var(--font-mono);
+}
+.us-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+.us-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.us-legend-item i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.us-donut-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.us-donut {
+  width: 150px;
+  height: 150px;
+}
+.us-donut-track {
+  stroke: rgba(128, 128, 128, 0.16);
+}
+.us-donut-pct {
+  fill: var(--text);
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--font-body);
+}
+.us-donut-sub {
+  fill: var(--text-faint);
+  font-size: 9px;
+  font-family: var(--font-body);
+}
+.us-donut-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+/* 统计卡片 */
+.us-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.us-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+}
+.us-stat-label {
+  font-size: 12px;
+  color: var(--text-faint);
+}
+.us-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+/* 顶排五卡更窄：数字略缩 + 禁止换行（「31分钟」等保持一行） */
+.us-cards-five .us-stat-value {
+  font-size: 20px;
+}
+/* 模式分布表 */
+.us-table-card {
+  padding: 0;
+  overflow: hidden;
+}
+.us-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.us-table th {
+  text-align: left;
+  padding: 9px 16px;
+  color: var(--text-faint);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  background: rgba(128, 128, 128, 0.05);
+}
+.us-table td {
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.us-table tbody tr {
+  opacity: 0;
+  animation: us-row-in 0.4s var(--ease) forwards;
+}
+.us-table tbody tr:last-child td {
+  border-bottom: none;
+}
+@keyframes us-row-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.us-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+.us-share i {
+  height: 5px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  min-width: 2px;
+  transition: width 0.6s var(--ease);
+}
+.us-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 13px;
+}
+@media (max-width: 900px) {
+  .us-charts {
+    grid-template-columns: 1fr;
+  }
+  .us-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 顶排五卡片（累计/峰值/最长时长/连续天数） */
+.us-cards-five {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+@media (max-width: 900px) {
+  .us-cards-five {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Token 活动热力图 */
+.us-heat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.us-heat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.us-heat-toggle {
+  display: inline-flex;
+  gap: 3px;
+  background: rgba(128, 128, 128, 0.14);
+  border-radius: 99px;
+  padding: 2px;
+}
+.us-heat-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  font: inherit;
+  font-size: 11.5px;
+  padding: 3px 12px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.us-heat-btn:hover {
+  color: var(--text);
+}
+.us-heat-btn.on {
+  color: var(--text);
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-1);
+}
+.us-heat {
+  position: relative;
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
+/* 悬停明细浮层（热力图 / 柱状图共用）：fixed 跟随鼠标，不受滚动容器 overflow 裁剪 */
+.us-tip {
+  position: fixed;
+  transform: translate(-50%, -130%);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 7px 11px;
+  font-size: 11px;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 120px;
+  max-width: 280px;
+  box-shadow: var(--shadow-2);
+  pointer-events: none;
+  z-index: 5;
+  font-variant-numeric: tabular-nums;
+}
+.us-tip b {
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.us-tip-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.us-tip-row i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+/* 左侧周几标注 + 图表主体（周几列与网格行一一对齐：7 × 20px 格 + 6 × 4px 间距） */
+.us-heat-body {
+  display: flex;
+  gap: 6px;
+}
+.us-heat-days {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 14px;
+  flex-shrink: 0;
+}
+.us-heat-days span {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+.us-heat-main {
+  width: min-content;
+  min-width: 0;
+}
+.us-heat-grid {
+  display: flex;
+  gap: 4px;
+  min-width: min-content;
+}
+.us-heat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.us-heat-cell {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: rgba(128, 128, 128, 0.12);
+  cursor: default;
+  animation: us-cell-in 0.4s var(--ease) backwards;
+  transition: transform var(--t-fast) var(--ease);
+}
+.us-heat-cell.blank {
+  background: transparent;
+  pointer-events: none;
+  animation: none;
+}
+.us-heat-cell:hover {
+  transform: scale(1.18);
+  outline: 1px solid var(--gold);
+}
+@keyframes us-cell-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+.us-heat-cell.lv1 { background: rgba(76, 195, 255, 0.25); }
+.us-heat-cell.lv2 { background: rgba(76, 195, 255, 0.45); }
+.us-heat-cell.lv3 { background: rgba(76, 195, 255, 0.68); }
+.us-heat-cell.lv4 { background: #4cc3ff; }
+.us-heat-grid.weekly .us-heat-cell {
+  width: 40px;
+  height: 20px;
+  border-radius: 6px;
+}
+.us-heat-months {
+  position: relative;
+  height: 14px;
+  margin-left: 2px;
+}
+.us-heat-month {
+  position: absolute;
+  font-size: 10.5px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+
+/* ── 最近任务记录（统计页最底部） ─────────────────────────────
+   数据源 GET /api/usage/records（最新在前）；任务完成经 usage:new-record 事件实时刷新。
+   列：时间 / 任务描述 / 模型 / 时长 / Token 消耗（输入+输出合计）。 */
+.us-records-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 0 0;
+}
+.us-records-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 14px;
+}
+.us-records-sub {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+.us-records-scroll {
+  overflow-x: auto;
+  max-height: 340px;
+  overflow-y: auto;
+}
+.us-records {
+  min-width: 620px;
+}
+.us-records th,
+.us-records td {
+  white-space: nowrap;
+}
+.us-records-title {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.us-records-title .us-records-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.us-records-title i {
+  display: block;
+  font-style: normal;
+  font-size: 10.5px;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+.us-records-model {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.us-records-time,
+.us-records-dur {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+.us-records-token b {
+  display: block;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.us-records-token-sub {
+  display: block;
+  font-size: 10.5px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  margin-top: 2px;
+}

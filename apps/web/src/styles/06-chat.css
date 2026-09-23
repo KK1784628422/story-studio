@@ -1,0 +1,1080 @@
+/* ── 06 聊天面板 ─────────────────────────────────────────────── */
+.chat-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.chat-messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-behavior: auto;
+}
+
+.chat-empty {
+  margin: auto;
+  text-align: center;
+  padding: 40px 20px;
+  user-select: none;
+}
+.chat-empty-title {
+  font-family: var(--font-kai);
+  font-size: 34px;
+  letter-spacing: 6px;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+.chat-empty-title::after {
+  content: '';
+  display: block;
+  width: 46px;
+  height: 3px;
+  margin: 14px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.7;
+}
+.chat-empty-sub {
+  font-size: 13px;
+  color: var(--text-faint);
+  line-height: 1.9;
+  max-width: 380px;
+}
+
+.msg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: msg-in var(--t-med) var(--ease);
+}
+/* 轮次间距：每轮消息与上一轮拉开，任务边界更清晰 */
+.msg + .msg {
+  margin-top: 18px;
+}
+
+.msg-role {
+  font-size: 20px;
+  color: var(--text-faint);
+  letter-spacing: 0.6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.msg-role .icon {
+  vertical-align: -0.18em;
+}
+.msg-user .msg-role {
+  justify-content: flex-end;
+  font-size: 14px;
+}
+.msg-user .msg-role .icon {
+  display: none;
+}
+
+.msg-tag-waiting {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  color: var(--gold);
+  border: 1px solid rgba(208, 167, 90, 0.3);
+  background: var(--gold-soft);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 10.5px;
+}
+
+.msg-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.75;
+  font-size: 14px;
+  padding: 10px 14px;
+  border-radius: var(--r-lg);
+  border: 1px solid transparent;
+}
+.msg-user .msg-text {
+  background: var(--accent-soft);
+  border-color: rgba(224, 72, 62, 0.28);
+  margin-left: 32px;
+}
+.msg-assistant .msg-text {
+  background: var(--bg-panel);
+  border-color: var(--border);
+  /* Agent 正文放大一号，行距更松，阅读主导 */
+  font-size: 15px;
+  line-height: 1.85;
+  padding: 13px 17px;
+}
+
+.msg-hist-approval {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-md);
+  color: var(--text-faint);
+  font-size: 12.5px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+/* 会话 Markdown（dangerouslySetInnerHTML 的排版契约） */
+.msg-markdown {
+  white-space: normal !important;
+  font-size: 14px;
+  line-height: 1.78;
+}
+.msg-markdown p {
+  margin: 0.5em 0;
+}
+.msg-markdown h1,
+.msg-markdown h2,
+.msg-markdown h3,
+.msg-markdown h4,
+.msg-markdown h5,
+.msg-markdown h6 {
+  margin: 0.9em 0 0.4em;
+  line-height: 1.4;
+  color: var(--text);
+}
+.msg-markdown h1 {
+  font-size: 1.35em;
+}
+.msg-markdown h2 {
+  font-size: 1.22em;
+}
+.msg-markdown h3 {
+  font-size: 1.1em;
+}
+.msg-markdown pre {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.msg-markdown code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--gold);
+}
+.msg-markdown pre code {
+  background: transparent;
+  padding: 0;
+  color: var(--text);
+}
+.msg-markdown table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.6em 0;
+  font-size: 13px;
+}
+.msg-markdown th,
+.msg-markdown td {
+  border: 1px solid var(--border-strong);
+  padding: 6px 10px;
+  text-align: left;
+}
+.msg-markdown th {
+  background: var(--bg-raised);
+  color: var(--text);
+}
+.msg-markdown blockquote {
+  margin: 0.6em 0;
+  padding: 6px 14px;
+  border-left: 3px solid var(--accent);
+  background: rgba(255, 255, 255, 0.025);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  color: var(--text-dim);
+}
+.msg-markdown hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1em 0;
+}
+.msg-markdown a {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(208, 167, 90, 0.5);
+}
+.msg-markdown a:hover {
+  color: var(--text);
+}
+.msg-markdown ul,
+.msg-markdown ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+.msg-markdown li {
+  margin: 0.25em 0;
+}
+
+/* 流式状态行 */
+.chat-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  padding: 6px 4px 2px;
+}
+
+.typing-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+.typing-dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: dot-pulse 1.2s ease-in-out infinite;
+}
+.typing-dots i:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.typing-dots i:nth-child(3) {
+  animation-delay: 0.36s;
+}
+
+.chat-awaiting {
+  border: 1px solid rgba(208, 167, 90, 0.3);
+  background: var(--gold-soft);
+  color: var(--gold);
+  font-size: 12.5px;
+  padding: 8px 14px;
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+}
+
+/* Agent 单轮步骤进度条（步骤 n/总上限；撞上限后由 chat-cap-notice 提示继续） */
+.chat-stepprogress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 6px 12px;
+}
+.chat-stepprogress-track {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+.chat-stepprogress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), #ff8a5c);
+  transition: width 0.3s var(--ease);
+}
+.chat-stepprogress-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* 单轮步数上限提醒：任务被 stepCountIs(80) 截断后明确提示用户回复「继续」 */
+.chat-cap-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 12px 8px;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: var(--warn-soft);
+  border: 1px solid var(--warn);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.chat-cap-notice svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--warn);
+}
+
+.chat-error {
+  border: 1px solid rgba(242, 85, 73, 0.4);
+  background: var(--bad-soft);
+  color: var(--bad);
+  font-size: 12.5px;
+  padding: 9px 14px;
+  border-radius: var(--r-md);
+}
+.chat-empty-reply {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(217, 154, 61, 0.45);
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: 12.5px;
+  padding: 9px 14px;
+  border-radius: var(--r-md);
+  animation: toast-in 0.25s var(--ease);
+}
+.chat-login-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(208, 167, 90, 0.45);
+  border-left: 3px solid var(--gold);
+  background: linear-gradient(180deg, var(--gold-soft), rgba(208, 167, 90, 0.06));
+  color: var(--gold);
+  font-size: 12.5px;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  animation: toast-in 0.25s var(--ease);
+}
+.chat-login-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.chat-login-title {
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+.chat-login-msg {
+  color: var(--text-dim);
+}
+.chat-login-sub {
+  color: var(--text-faint);
+  font-size: 11.5px;
+  line-height: 1.6;
+  margin-top: 2px;
+}
+.chat-login-focus {
+  flex-shrink: 0;
+  appearance: none;
+  border: 1px solid rgba(208, 167, 90, 0.5);
+  background: var(--gold-soft);
+  color: var(--gold);
+  font-size: 12px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
+}
+.chat-login-focus:hover {
+  color: #fff3ea;
+  border-color: rgba(208, 167, 90, 0.8);
+  transform: translateY(-1px);
+}
+
+/* ask_ai 网页 AI 生成超时对话框：继续等待 / 放弃回退通道 A */
+.chat-askai-card {
+  border-color: rgba(88, 133, 224, 0.5);
+  border-left-color: #5885e0;
+  background: linear-gradient(180deg, rgba(88, 133, 224, 0.14), rgba(88, 133, 224, 0.05));
+  color: #8fb4f5;
+}
+.chat-askai-card .chat-login-title {
+  color: #8fb4f5;
+}
+.chat-askai-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.chat-askai-btn {
+  appearance: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  transition: transform var(--t-fast) var(--ease), filter var(--t-fast) var(--ease),
+    background var(--t-fast) var(--ease);
+}
+.chat-askai-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.chat-askai-btn:active {
+  transform: scale(0.96);
+}
+.chat-askai-go {
+  border: 1px solid rgba(143, 180, 245, 0.6);
+  background: rgba(88, 133, 224, 0.28);
+  color: #dbe7ff;
+}
+.chat-askai-go:hover {
+  background: rgba(88, 133, 224, 0.42);
+}
+.chat-askai-abort {
+  border: 1px solid rgba(224, 72, 62, 0.55);
+  background: transparent;
+  color: #ffb3a7;
+}
+.chat-askai-abort:hover {
+  background: rgba(224, 72, 62, 0.18);
+}
+
+.chat-jump {
+  position: absolute;
+  bottom: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-raised);
+  color: var(--gold);
+  font-size: 12px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow-2);
+  transition: transform var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  animation: drawer-drop var(--t-med) var(--ease);
+}
+.chat-jump:hover {
+  transform: translateX(-50%) translateY(-2px);
+  border-color: var(--gold);
+}
+
+/* 思考过程（折叠卡） */
+.reasoning {
+  border: 1px solid var(--border);
+  border-left: 3px solid rgba(208, 167, 90, 0.55);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.018);
+  overflow: hidden;
+}
+.reasoning-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.reasoning-head:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.03);
+}
+.reasoning-title {
+  display: inline-flex;
+  align-items: center;
+  color: var(--gold);
+}
+.reasoning-toggle {
+  color: var(--text-faint);
+  font-size: 11px;
+}
+.reasoning-body {
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px 14px 12px;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--text-dim);
+  white-space: pre-wrap;
+  border-top: 1px dashed var(--border);
+}
+
+/* ── 任务过程折叠容器：任务完成后收起过程（思考+工具+中间说明），只留最终输出 ── */
+.process-fold {
+  border: 1px solid var(--border);
+  border-left: 3px solid rgba(208, 167, 90, 0.35);
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.018);
+  overflow: hidden;
+}
+.process-fold-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  text-align: left;
+}
+.process-fold-head:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.03);
+}
+.process-fold-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gold);
+  flex: none;
+}
+.process-fold-meta {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-faint);
+  font-size: 11px;
+  font-family: var(--font-mono);
+}
+.process-fold-toggle {
+  color: var(--text-faint);
+  font-size: 11px;
+  flex: none;
+}
+.process-fold-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding: 8px 10px 10px;
+  border-top: 1px dashed var(--border);
+}
+/* flex 压缩陷阱修复：flex 子元素默认 flex-shrink:1，且 overflow:hidden 的元素
+   （.tool-card/.reasoning）自动最小高度为 0——内容超高时会被压成 0 高只剩边框
+   （表现为一串横线、工具/思考不可见），且压缩后恰好"适应"max-height 导致
+   overflow-y:auto 永不触发。禁收缩后子元素保持自然高度，超出正常滚动。 */
+.process-fold-body > * {
+  flex-shrink: 0;
+}
+
+/* ── 交付卡（任务结束后：章节交付的结构化收尾 + 朱印）── */
+.dlv-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin: 2px 0 10px;
+  padding: 12px 14px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--ok);
+  border-radius: var(--r-lg);
+}
+.dlv-card.stopped {
+  border-left-color: var(--warn);
+}
+.dlv-stamp {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--ok);
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  transform: rotate(-8deg);
+  opacity: 0.92;
+}
+.dlv-stamp i {
+  font-family: var(--font-kai);
+  font-size: 24px;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--ok);
+  line-height: 1;
+}
+.dlv-card.stopped .dlv-stamp {
+  border-color: var(--warn);
+}
+.dlv-card.stopped .dlv-stamp i {
+  color: var(--warn);
+}
+.dlv-body {
+  flex: 1;
+  min-width: 0;
+}
+.dlv-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+.dlv-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 14px;
+  margin-top: 6px;
+}
+.dlv-kv {
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+.dlv-kv b {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.dlv-kv.pass b {
+  color: var(--ok);
+}
+.dlv-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+.dlv-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  border-radius: var(--r-md);
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+}
+.dlv-btn:hover {
+  background: var(--gold-soft);
+}
+/* 朱印落章动效：盖章一次（尊重 prefers-reduced-motion） */
+@media (prefers-reduced-motion: no-preference) {
+  .dlv-stamp {
+    animation: dlv-stamp-in 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  }
+}
+@keyframes dlv-stamp-in {
+  from {
+    transform: rotate(-8deg) scale(1.8);
+    opacity: 0;
+  }
+  70% {
+    transform: rotate(-8deg) scale(0.94);
+    opacity: 0.92;
+  }
+  to {
+    transform: rotate(-8deg) scale(1);
+    opacity: 0.92;
+  }
+}
+
+/* ── Agent 执行指示器（brutalist 混凝土板 · 参考 未添加的样式/任务列表重构.txt 重构）──
+   视觉语言：3px 主色厚框直角块 + 悬停三层错位混凝土板影 + 斜纹肌理 + 四角工业括号（悬停充色
+   放大）+ 边缘铆钉 + 循环扫描线 + 悬停浮现 SYS// 系统标签；token 面板为上浮独立混凝土板
+   （bottom:100% 锚定，不挤动输入栏布局），翻板展开带弹性回弹。
+   主题适配：主色一律走 --ari-accent（执行=洒金 / 完成=玉青，随主题令牌自动切换）；
+   板影与肌理走 --ari-slab* / --ari-stripe*（浅色/纯白/极光在 30-themes.css 定点回写） */
+.ari {
+  --ari-accent: var(--gold);
+  --ari-slab1: rgba(0, 0, 0, 0.45);
+  --ari-slab2: rgba(46, 40, 30, 0.5);
+  --ari-slab3: rgba(88, 77, 58, 0.35);
+  --ari-stripe: rgba(255, 255, 255, 0.03);
+  --ari-stripe2: rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 1;
+  margin: 0 14px 8px;
+  border: 3px solid var(--ari-accent);
+  background: var(--bg-panel);
+  box-shadow: 4px 4px 0 var(--ari-slab1);
+  font-family: var(--font-mono);
+  transition: box-shadow 0.55s cubic-bezier(0.19, 1, 0.22, 1), border-color 0.35s var(--ease);
+}
+.ari-done {
+  --ari-accent: var(--ok);
+}
+/* 终态变体：出错=绯红 FAILED / 手动终止=琥珀 STOPPED（主色随主题令牌切换） */
+.ari-done.ari-err {
+  --ari-accent: var(--bad);
+}
+.ari-done.ari-stop {
+  --ari-accent: var(--warn);
+}
+.ari:hover {
+  box-shadow: 5px 5px 0 var(--ari-slab1), 10px 10px 0 var(--ari-slab2), 15px 15px 0 var(--ari-slab3);
+}
+
+/* 混凝土肌理：双向斜纹 + 纸面年轮弧（参考 concrete-texture / paper-texture） */
+.ari-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.85;
+  background: radial-gradient(circle at 16% 60%, transparent 14%, var(--ari-stripe2) 15%, var(--ari-stripe2) 16%, transparent 17%),
+    repeating-linear-gradient(45deg, var(--ari-stripe) 0 2px, transparent 2px 4px),
+    repeating-linear-gradient(-45deg, transparent 0 8px, var(--ari-stripe2) 8px 10px);
+}
+
+/* 四角工业括号：悬停充主色并放大（参考 corner-bracket） */
+.ari-corner {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border: 3px solid var(--text-dim);
+  background: var(--bg-panel);
+  z-index: 2;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.25s var(--ease);
+}
+.ari-tl { top: -3px; left: -3px; border-right: none; border-bottom: none; }
+.ari-tr { top: -3px; right: -3px; border-left: none; border-bottom: none; }
+.ari-bl { bottom: -3px; left: -3px; border-right: none; border-top: none; }
+.ari-br { bottom: -3px; right: -3px; border-left: none; border-top: none; }
+.ari:hover .ari-corner {
+  transform: scale(1.4);
+  background: var(--ari-accent);
+}
+
+/* 边缘铆钉（参考 rivet）：左右缘中点两颗，悬停亮起放大 */
+.ari-rivet {
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  transform: translateY(-50%);
+  z-index: 2;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55), background-color 0.25s var(--ease);
+}
+.ari-rivet.l { left: 5px; }
+.ari-rivet.r { right: 5px; }
+.ari:hover .ari-rivet {
+  background: var(--text);
+  transform: translateY(-50%) scale(1.35);
+}
+
+/* 扫描线：执行中循环扫过（完成态静止隐藏） */
+.ari-scan {
+  position: absolute;
+  top: 0;
+  left: -5%;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, var(--ari-accent), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+.ari-run .ari-scan {
+  opacity: 0.9;
+  animation: ari-scan 1.8s linear infinite;
+}
+@keyframes ari-scan {
+  from { left: -4%; }
+  to { left: 104%; }
+}
+
+/* 悬停浮现的系统标签（参考 type-accent：SYS//TASK_MANAGER） */
+.ari-sys {
+  position: absolute;
+  top: -17px;
+  left: -2px;
+  color: var(--ari-accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s var(--ease), transform 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  pointer-events: none;
+}
+.ari:hover .ari-sys {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 头部单行：标签 · 状态方点 · 状态文字 · 耗时 */
+.ari-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.ari-tag {
+  color: var(--ari-accent);
+  font-weight: 700;
+  flex: none;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+  transition: color 0.35s var(--ease), text-shadow 0.3s var(--ease);
+}
+.ari:hover .ari-tag {
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5), 4px 4px 0 rgba(0, 0, 0, 0.22);
+}
+.ari-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--ari-accent);
+  flex: none;
+}
+.ari-run .ari-dot { animation: ari-blink 1s steps(2, jump-none) infinite; }
+@keyframes ari-blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.25; }
+  100% { opacity: 1; }
+}
+.ari-status {
+  color: var(--text-dim);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ari-time {
+  color: var(--text);
+  flex: none;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 驾驶舱（仅执行中）：当前动作一行（NOW 标签 + 工具摘要）+ 步骤进度条（斜纹填充 n/total） */
+.ari-cockpit {
+  position: relative;
+  z-index: 1;
+  padding: 0 16px 10px;
+}
+.ari-action {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.ari-action-tag {
+  flex: none;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ari-accent);
+  border: 1px solid var(--ari-accent);
+  padding: 1px 4px;
+}
+.ari-action-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.ari-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 7px;
+}
+.ari-progress-bar {
+  flex: 1;
+  min-width: 0;
+  height: 9px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-soft);
+  overflow: hidden;
+}
+.ari-progress-bar i {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(-45deg, var(--ari-accent) 0 5px, transparent 5px 9px);
+  transition: width 0.4s var(--ease);
+}
+.ari-progress-n {
+  flex: none;
+  font-size: 10px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* hover 展开面板：上浮独立混凝土板（不挤动布局）；底部 10px 透明桥接区保证
+   指针从指示条滑入面板不闪断；翻板展开带弹性回弹（rotateX 翻转 + 弹性曲线） */
+.ari-panel {
+  position: absolute;
+  left: -3px;
+  right: -3px;
+  bottom: 100%;
+  padding-bottom: 10px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: perspective(700px) rotateX(8deg);
+  transform-origin: bottom center;
+  transition: max-height 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.28s var(--ease),
+    transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.ari:hover .ari-panel {
+  max-height: 300px;
+  opacity: 1;
+  transform: perspective(700px) rotateX(0deg);
+}
+.ari-panel-in {
+  border: 3px solid var(--ari-accent);
+  background: var(--bg-panel);
+  box-shadow: 6px 6px 0 var(--ari-slab1), 12px 12px 0 var(--ari-slab2);
+  padding: 12px 14px 14px;
+}
+
+/* token 统计四格（混凝土方格，1px 缝隙拼色） */
+.ari-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border-strong);
+  border: 1px solid var(--border-strong);
+}
+
+/* 任务累计标记：跨轮续跑（审批/问答）时显示值含此前轮次 */
+.ari-cross {
+  font-size: 10.5px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  padding: 4px 2px 0;
+}
+
+/* 完全允许开关（输入栏工具条内、模型切换旁的 chip；默认手动审批） */
+.chat-allow-chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--text-faint);
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 4px 11px;
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+.chat-allow-chip:hover {
+  color: var(--text-dim);
+  border-color: var(--accent);
+}
+.chat-allow-chip.on {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(208, 167, 90, 0.1);
+}
+.ari-stat {
+  background: var(--bg-raised);
+  padding: 9px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ari-stat b {
+  color: var(--ari-accent);
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ari-stat span {
+  color: var(--text-faint);
+  font-size: 10.5px;
+  letter-spacing: 1px;
+}
+
+/* 上下文占用：标题行 + 主占用条 + 五段构成条 */
+.ari-ctx {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ari-ctx-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+.ari-ctx-cap {
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ari-ctx-bar {
+  height: 12px;
+  border: 2px solid var(--border-strong);
+  background: var(--bg-soft);
+  position: relative;
+}
+.ari-ctx-bar .ari-seg {
+  position: absolute;
+  inset: 1px auto 1px 1px;
+  background: var(--ari-accent);
+  background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.22) 0 4px, transparent 4px 8px);
+}
+.ari-ctx-mix {
+  display: flex;
+  gap: 2px;
+  height: 5px;
+}
+.ari-ctx-mix i {
+  background: var(--ari-accent);
+  min-width: 1px;
+}
+.ari-ctx-mix i:nth-child(1) { opacity: 1; }
+.ari-ctx-mix i:nth-child(2) { opacity: 0.8; }
+.ari-ctx-mix i:nth-child(3) { opacity: 0.6; }
+.ari-ctx-mix i:nth-child(4) { opacity: 0.4; }
+.ari-ctx-mix i:nth-child(5) { opacity: 0.22; }
+.ari-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--text-faint);
+  font-size: 10.5px;
+}
+.ari-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.ari-legend i {
+  width: 7px;
+  height: 7px;
+  background: var(--ari-accent);
+}
+.ari-legend .s1 { opacity: 1; }
+.ari-legend .s2 { opacity: 0.8; }
+.ari-legend .s3 { opacity: 0.6; }
+.ari-legend .s4 { opacity: 0.4; }
+.ari-legend .s5 { opacity: 0.22; }
+.ari-empty {
+  color: var(--text-faint);
+  font-size: 11.5px;
+  line-height: 1.6;
+}
+
+/* 窄屏：统计格转两列，展开上限放宽（图例换行后更高） */
+@media (max-width: 700px) {
+  .ari-stats { grid-template-columns: repeat(2, 1fr); }
+  .ari:hover .ari-panel { max-height: 400px; }
+}
+
+
+

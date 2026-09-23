@@ -1,0 +1,167 @@
+/* ── 20 导入向导 ─────────────────────────────────────────────── */
+.wp-import-wrap {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  padding: 18px 16px 30px;
+}
+
+.import-panel {
+  width: min(720px, 100%);
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.imp-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.imp-badge {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gold);
+  display: inline-flex;
+  align-items: center;
+}
+.imp-step {
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.imp-steps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.imp-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--t-med) var(--ease);
+}
+.imp-dot.on {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff6ef;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.imp-arrow {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.imp-tip {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  line-height: 1.8;
+  border-left: 3px solid var(--gold);
+  background: rgba(208, 167, 90, 0.06);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  padding: 10px 14px;
+}
+.imp-tip code {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--gold);
+}
+
+.imp-textarea {
+  width: 100%;
+  min-height: 220px;
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.8;
+  padding: 13px 15px;
+  resize: vertical;
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.imp-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.imp-form {
+  display: grid;
+  grid-template-columns: 140px 1fr 220px;
+  gap: 12px;
+}
+
+.imp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.imp-field input,
+.imp-field select {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-size: 13px;
+  padding: 8px 12px;
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.imp-field input:focus,
+.imp-field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.imp-meta-info {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+.imp-error {
+  border: 1px solid rgba(242, 85, 73, 0.4);
+  background: var(--bad-soft);
+  color: var(--bad);
+  font-size: 12.5px;
+  padding: 9px 14px;
+  border-radius: var(--r-md);
+}
+
+.imp-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-primary {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+  color: #fff6ef;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 22px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 12px -2px rgba(224, 72, 62, 0.45);
+  transition: transform var(--t-fast) var(--ease), filter var(--t-fast) var(--ease);
+}
+.btn-primary:hover {
+  filter: brightness(1.08);
+}
+.btn-primary:active {
+  transform: scale(0.97);
+}

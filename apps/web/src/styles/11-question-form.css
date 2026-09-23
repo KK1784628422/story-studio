@@ -1,0 +1,142 @@
+/* ── 11 问答表单 ─────────────────────────────────────────────── */
+.qform {
+  border: 1px solid rgba(208, 167, 90, 0.4);
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, var(--gold-soft), transparent 150%);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.qform-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.qform-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold);
+}
+.qform-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+}
+.qform-close {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+}
+.qform-close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.qform-question {
+  max-height: 160px;
+  overflow-y: auto;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 10px 14px;
+}
+.qform-question p:first-child {
+  margin-top: 0;
+}
+.qform-question p:last-child {
+  margin-bottom: 0;
+}
+
+.qform-input {
+  width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.7;
+  padding: 9px 12px;
+  /* textarea 化：禁手拖改尺寸（JS autoGrow 控高），超出上限后内部滚动 */
+  resize: none;
+  overflow-y: auto;
+  min-height: 42px;
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.qform-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.qform-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* 问答表单「发送答案」胶囊主按钮（btn-send 是 36px 圆钮，不适合文字） */
+.qform-send {
+  appearance: none;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+  color: #fff7ee;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 9px 20px;
+  cursor: pointer;
+  flex: none;
+  transition: filter var(--t-fast) var(--ease), transform var(--t-fast) var(--ease), opacity var(--t-fast) var(--ease);
+}
+.qform-send:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.qform-send:active:not(:disabled) {
+  transform: translateY(0);
+}
+.qform-send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.qform-sum {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.qform-sum-row {
+  display: flex;
+  gap: 10px;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.qform-sum-q {
+  flex: none;
+  color: var(--text-faint);
+  min-width: 20px;
+  font-family: var(--font-mono);
+}
+.qform-sum-a {
+  color: var(--text);
+  min-width: 0;
+}
+.qform-sum-a.skip {
+  color: var(--text-faint);
+  font-style: italic;
+}

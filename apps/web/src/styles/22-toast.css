@@ -1,0 +1,41 @@
+/* ── 22 Toast ────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-size: 13px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-3);
+  animation: toast-in var(--t-med) var(--ease);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+  max-width: 80vw;
+  text-align: center;
+}
+
+.toast-action {
+  pointer-events: auto;
+  flex-shrink: 0;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+  font-size: 12px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+
+.toast-action:hover {
+  background: var(--accent);
+  color: var(--bg-raised);
+  transform: translateY(-1px);
+}

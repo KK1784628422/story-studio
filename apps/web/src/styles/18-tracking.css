@@ -1,0 +1,320 @@
+/* ── 18 追踪面板 ─────────────────────────────────────────────── */
+.tracking-panel {
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px 18px 30px;
+}
+
+.tracking-context {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.tc-chip {
+  font-size: 12px;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  border-radius: 999px;
+  padding: 4px 13px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tracking-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.tn-row {
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-panel);
+  padding: 11px 14px;
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+.tn-row b {
+  display: block;
+  color: var(--warn);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.tn-row ul {
+  margin: 0;
+  padding-left: 1.4em;
+  color: var(--text-dim);
+}
+
+.tracking-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+  position: sticky;
+  top: -16px;
+  background: var(--bg);
+  z-index: 1;
+}
+
+.tt-tab {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 13px;
+  padding: 9px 16px;
+  cursor: pointer;
+  position: relative;
+  transition: color var(--t-fast) var(--ease);
+}
+.tt-tab:hover {
+  color: var(--text-dim);
+}
+.tt-tab.active {
+  color: var(--text);
+}
+.tt-tab.active::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.tracking-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tk-card {
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-panel);
+  overflow: hidden;
+  transition: border-color var(--t-fast) var(--ease);
+}
+.tk-card:hover {
+  border-color: var(--border-strong);
+}
+
+.tk-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 13px;
+  padding: 10px 14px;
+  cursor: pointer;
+  text-align: left;
+}
+.tk-head:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tk-name {
+  font-weight: 600;
+  flex: none;
+}
+
+.tk-sub {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.tk-chip {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.tk-caret {
+  flex: none;
+  color: var(--text-faint);
+  font-size: 10px;
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.tk-detail {
+  border-top: 1px dashed var(--border);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.tk-field {
+  display: flex;
+  gap: 12px;
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+.tk-field-label {
+  flex: none;
+  min-width: 72px;
+  color: var(--text-faint);
+}
+.tk-field > *:last-child {
+  color: var(--text-dim);
+  min-width: 0;
+}
+
+.tk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.tk-table th,
+.tk-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.tk-table th {
+  color: var(--text-faint);
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: 0.5px;
+}
+.tk-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tk-records {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 4px 0;
+}
+.tk-record-chip {
+  font-size: 12px;
+  color: var(--text-dim);
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 6px 11px;
+}
+
+/* 伏笔/揭示状态徽章（fs-* / rv-* 为中文动态类名契约） */
+.fs-badge,
+.rv-badge {
+  font-size: 10.5px;
+  border-radius: 4px;
+  padding: 1px 7px;
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  display: inline-flex;
+}
+.fs-已埋 {
+  color: var(--gold);
+  border-color: rgba(208, 167, 90, 0.4);
+  background: var(--gold-soft);
+}
+.fs-已回收 {
+  color: var(--ok);
+  border-color: rgba(90, 168, 124, 0.4);
+  background: var(--ok-soft);
+}
+.fs-已过期 {
+  color: var(--text-faint);
+}
+.fs-放弃 {
+  color: var(--bad);
+  border-color: rgba(242, 85, 73, 0.35);
+  background: var(--bad-soft);
+}
+.rv-未揭示 {
+  color: var(--text-faint);
+}
+.rv-部分揭示 {
+  color: var(--warn);
+  border-color: rgba(217, 154, 61, 0.4);
+  background: var(--warn-soft);
+}
+.rv-已揭示 {
+  color: var(--ok);
+  border-color: rgba(90, 168, 124, 0.4);
+  background: var(--ok-soft);
+}
+
+/* 时间线 */
+.tl-item {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: var(--r-md);
+  background: var(--bg-panel);
+  padding: 11px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.tl-item.rv-已揭示 {
+  border-left-color: var(--ok);
+}
+.tl-item.rv-部分揭示 {
+  border-left-color: var(--warn);
+}
+.tl-item.rv-未揭示 {
+  border-left-color: var(--text-faint);
+}
+
+.tl-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.tl-id {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 4px;
+  padding: 1px 6px;
+  flex: none;
+}
+.tl-time {
+  font-size: 11.5px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+.tl-fact {
+  font-size: 13px;
+  line-height: 1.7;
+}
+.tl-reader {
+  font-size: 12px;
+  color: var(--text-dim);
+  border-top: 1px dashed var(--border);
+  padding-top: 7px;
+}
+.tl-chars {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}

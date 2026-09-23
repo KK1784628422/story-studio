@@ -1,0 +1,135 @@
+/* ── 21 报告面板 ─────────────────────────────────────────────── */
+.report-panel {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+.rp-list {
+  width: 260px;
+  flex: none;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+
+.rp-list-head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+  z-index: 1;
+}
+
+.rp-badge {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gold);
+  display: inline-flex;
+  align-items: center;
+}
+
+.rp-refresh {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 14px;
+  cursor: pointer;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-sm);
+  transition: color var(--t-fast) var(--ease), transform var(--t-med) var(--ease);
+}
+.rp-refresh:hover {
+  color: var(--text);
+  transform: rotate(180deg);
+}
+
+.rp-empty {
+  padding: 30px 16px;
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.rp-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  appearance: none;
+  border: none;
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.rp-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+.rp-item.active {
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+}
+.rp-name {
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rp-meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-faint);
+}
+
+.rp-body {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.rp-markdown {
+  max-width: 860px;
+  padding: 20px 28px 40px;
+}
+.rp-markdown h1 {
+  font-family: var(--font-kai);
+  letter-spacing: 2px;
+  font-size: 1.5em;
+}
+.rp-markdown h2,
+.rp-markdown h3 {
+  color: var(--gold);
+}
+.rp-markdown table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.7em 0;
+  font-size: 12.5px;
+}
+.rp-markdown th,
+.rp-markdown td {
+  border: 1px solid var(--border-strong);
+  padding: 7px 11px;
+  text-align: left;
+}
+.rp-markdown th {
+  background: var(--bg-raised);
+}
+.rp-markdown blockquote {
+  margin: 0.7em 0;
+  padding: 8px 16px;
+  border-left: 3px solid var(--gold);
+  background: rgba(208, 167, 90, 0.06);
+  color: var(--text-dim);
+}

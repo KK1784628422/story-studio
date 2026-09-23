@@ -1,0 +1,19 @@
+{
+  "source": "../oh-story-claudecode/.agents/skills",
+  "skills": [
+    "browser-cdp",
+    "story",
+    "story-cover",
+    "story-deslop",
+    "story-import",
+    "story-long-analyze",
+    "story-long-scan",
+    "story-long-write",
+    "story-review",
+    "story-setup",
+    "story-short-analyze",
+    "story-short-scan",
+    "story-short-write"
+  ],
+  "syncedAt": "2026-08-29T09:26:59.310Z"
+}

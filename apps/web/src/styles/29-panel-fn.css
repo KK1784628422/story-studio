@@ -1,0 +1,709 @@
+/* ── 29 可视化栏一级功能（可视化/文档编辑/浏览器） ───────────── */
+/* 书架 / 调试日志的居中弹窗（与模型设置同款交互） */
+.app-modal {
+  width: min(480px, 92vw);
+  max-height: 78vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  animation: pop-in var(--t-med) var(--ease);
+}
+.app-modal.wide {
+  width: min(720px, 94vw);
+}
+
+.app-modal-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.app-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+
+.app-modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px;
+}
+.app-modal.wide .app-modal-body {
+  padding: 10px 12px 14px;
+}
+.app-modal .session-item {
+  padding: 11px 12px;
+}
+.app-modal .session-title {
+  max-width: 260px;
+}
+
+/* 一级功能切换（胶囊容器 · hover 上浮放大 · 顶部冒出标签） */
+.wp-fn-tabs {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  /* 容器变窄（左栏展开拉伸等）时不溢出：限宽 + 横向滚动，按钮不压缩 */
+  max-width: calc(100% - 28px);
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 10px 14px 2px;
+  padding: 5px 7px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--bg-panel), var(--bg-soft));
+  box-shadow: var(--shadow-1);
+  position: relative;
+  z-index: 5;
+}
+.wp-fn-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.wp-fn-tab {
+  position: relative;
+  appearance: none;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  letter-spacing: 1px;
+  transition: transform 0.3s var(--ease), color var(--t-fast) var(--ease),
+    background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
+    box-shadow 0.3s var(--ease);
+}
+.wp-fn-tab:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 10px 22px -8px rgba(0, 0, 0, 0.6);
+}
+.wp-fn-tab:active {
+  transform: translateY(-1px) scale(1.0);
+}
+/* 顶部冒出的文字标签（横向功能栏参考效果） */
+.wp-fn-tab::after {
+  content: attr(data-label);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translate(-50%, 6px);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  color: var(--gold);
+  font-size: 10.5px;
+  letter-spacing: 1px;
+  line-height: 1;
+  padding: 5px 10px;
+  border-radius: 7px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  box-shadow: var(--shadow-2);
+}
+.wp-fn-tab:hover::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.wp-fn-tab.active {
+  color: #fff3ea;
+  background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 2px 10px -2px rgba(224, 72, 62, 0.5);
+}
+.wp-fn-tab.active:hover {
+  transform: translateY(-4px) scale(1.05);
+}
+
+.wp-body.view-docedit,
+.wp-body.view-browser {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* 文档工作台（栏内编辑） */
+.doc-workbench {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.dw-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.dw-title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  overflow: hidden;
+}
+.dw-title b {
+  font-size: 13.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ed-btn.primary {
+  color: var(--gold);
+  border-color: rgba(208, 167, 90, 0.45);
+  background: var(--gold-soft);
+}
+
+.dw-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px 28px 40px;
+}
+.dw-content .markdown-body {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.dw-edit {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dw-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-faint);
+  font-size: 13px;
+  text-align: center;
+  padding: 40px;
+  line-height: 1.9;
+}
+.dw-empty .icon {
+  color: var(--gold);
+}
+
+/* ── Quill 富文本编辑器（DocWorkbench 非正文文档）深色主题适配 ────────── */
+.dw-edit-rich {
+  gap: 0;
+}
+.dw-edit-rich .ql-toolbar.ql-snow {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 6px 8px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.dw-edit-rich .ql-toolbar.ql-snow .ql-formats {
+  margin-right: 8px;
+}
+.dw-edit-rich .ql-container.ql-snow {
+  flex: 1;
+  min-height: 0;
+  border: none;
+  background: var(--bg);
+}
+.dw-edit-rich .ql-editor {
+  min-height: 100%;
+  padding: 22px 30px 70px;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.85;
+  overflow-y: auto;
+}
+.dw-edit-rich .ql-editor.ql-blank::before {
+  color: var(--text-faint);
+  font-style: normal;
+}
+.dw-edit-rich .ql-editor h1,
+.dw-edit-rich .ql-editor h2,
+.dw-edit-rich .ql-editor h3 {
+  color: var(--text);
+  margin: 0.9em 0 0.5em;
+}
+.dw-edit-rich .ql-editor blockquote {
+  border-left: 3px solid var(--border-strong);
+  color: var(--text-dim);
+  margin: 0.6em 0;
+  padding-left: 14px;
+}
+.dw-edit-rich .ql-editor .ql-code-block-container {
+  background: rgba(128, 128, 128, 0.12);
+  border-radius: 6px;
+  color: var(--text-dim);
+}
+.dw-edit-rich .ql-editor a {
+  color: var(--accent);
+}
+/* 工具栏图标 / 文字 / 下拉用主题色 */
+.dw-edit-rich .ql-snow .ql-stroke {
+  stroke: var(--text-dim);
+}
+.dw-edit-rich .ql-snow .ql-fill {
+  fill: var(--text-dim);
+}
+.dw-edit-rich .ql-snow .ql-picker {
+  color: var(--text-dim);
+}
+.dw-edit-rich .ql-snow .ql-picker-options {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-strong);
+  color: var(--text-dim);
+  box-shadow: var(--shadow-2);
+}
+.dw-edit-rich .ql-snow.ql-toolbar button:hover,
+.dw-edit-rich .ql-snow .ql-picker-label:hover,
+.dw-edit-rich .ql-snow .ql-picker-item:hover {
+  color: var(--text);
+}
+.dw-edit-rich .ql-snow.ql-toolbar button:hover .ql-stroke,
+.dw-edit-rich .ql-snow .ql-picker-label:hover .ql-stroke {
+  stroke: var(--text);
+}
+.dw-edit-rich .ql-snow.ql-toolbar button.ql-active,
+.dw-edit-rich .ql-snow .ql-picker-label.ql-active {
+  color: var(--accent);
+}
+.dw-edit-rich .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.dw-edit-rich .ql-snow .ql-picker-label.ql-active .ql-stroke {
+  stroke: var(--accent);
+}
+.dw-edit-rich .ql-snow.ql-toolbar button.ql-active .ql-fill {
+  fill: var(--accent);
+}
+/* 字体下拉项显示（Quill 仅内置 serif/monospace 映射，自定义字体需补 content） */
+.dw-edit-rich .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="楷体"]::before,
+.dw-edit-rich .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="楷体"]::before {
+  content: "楷体";
+  font-family: "楷体", "KaiTi", serif;
+}
+.dw-edit-rich .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="黑体"]::before,
+.dw-edit-rich .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="黑体"]::before {
+  content: "黑体";
+  font-family: "黑体", "SimHei", sans-serif;
+}
+.dw-edit-rich .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="仿宋"]::before,
+.dw-edit-rich .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="仿宋"]::before {
+  content: "仿宋";
+  font-family: "仿宋", "FangSong", serif;
+}
+.dw-edit-rich .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="微软雅黑"]::before,
+.dw-edit-rich .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="微软雅黑"]::before {
+  content: "微软雅黑";
+  font-family: "微软雅黑", "Microsoft YaHei", sans-serif;
+}
+/* 编辑区内实际应用字体的 class（Quill class attributor 生成 ql-font-<值>） */
+.dw-edit-rich .ql-editor .ql-font-楷体 {
+  font-family: "楷体", "KaiTi", serif;
+}
+.dw-edit-rich .ql-editor .ql-font-黑体 {
+  font-family: "黑体", "SimHei", sans-serif;
+}
+.dw-edit-rich .ql-editor .ql-font-仿宋 {
+  font-family: "仿宋", "FangSong", serif;
+}
+.dw-edit-rich .ql-editor .ql-font-微软雅黑 {
+  font-family: "微软雅黑", "Microsoft YaHei", sans-serif;
+}
+
+.cards-hint {
+  margin-top: 18px;
+  font-size: 11.5px;
+  color: var(--text-faint);
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+}
+
+/* 内嵌浏览器 */
+.browser-pane {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.brow-toolbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+
+.brow-btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 12.5px;
+  min-width: 30px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.brow-btn:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.brow-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.brow-btn.go {
+  color: var(--gold);
+  border-color: rgba(208, 167, 90, 0.4);
+  background: var(--gold-soft);
+}
+
+.brow-url {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  padding: 6px 16px;
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.brow-url:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.brow-url::placeholder {
+  color: var(--text-faint);
+}
+
+.brow-home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px;
+  text-align: center;
+}
+.brow-home-title {
+  font-family: var(--font-kai);
+  font-size: 24px;
+  letter-spacing: 5px;
+  color: var(--text-dim);
+}
+.brow-home-sub {
+  font-size: 12.5px;
+  color: var(--text-faint);
+  line-height: 2;
+  margin-bottom: 10px;
+}
+
+.brow-bookmarks {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.brow-bookmark {
+  appearance: none;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-panel);
+  color: var(--text-dim);
+  font-size: 13px;
+  padding: 9px 22px;
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease);
+}
+.brow-bookmark:hover {
+  color: var(--gold);
+  border-color: rgba(208, 167, 90, 0.5);
+  transform: translateY(-2px);
+}
+
+.brow-frame {
+  flex: 1;
+  min-height: 0;
+  border: none;
+  background: #fff;
+  width: 100%;
+}
+
+/* ---- Agent浏览器面板（桌面化 Electron 嵌入 WebContentsView） ---- */
+.agent-home {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+}
+.agent-home-title {
+  font-family: var(--font-kai);
+  font-size: 20px;
+  letter-spacing: 4px;
+  color: var(--text-dim);
+}
+.agent-home-sub {
+  font-size: 12px;
+  color: var(--text-faint);
+  line-height: 1.8;
+}
+.agent-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(210px, 260px));
+  gap: 14px;
+  margin-top: 8px;
+}
+.agent-card {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+}
+.agent-card:hover {
+  border-color: rgba(208, 167, 90, 0.55);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-1);
+}
+.agent-card-badge {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+.agent-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.agent-card-name {
+  font-size: 13.5px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.agent-card-host {
+  font-size: 11.5px;
+  font-family: var(--font-mono);
+  color: var(--text-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- 内置浏览器面板（桌面化 Electron 嵌入 BrowserView） ---- */
+.wp-body.view-embedded {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.embedded-pane {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+.embedded-toolbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.embedded-holder {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  /* 内置 BrowserView 由主进程盖在此区域；底色与窗口一致避免白闪 */
+  background: var(--bg);
+}
+/* Agent 操控光圈：动态描边呼吸（原生视图盖在 DOM 上，光圈以外部辉光形态呈现） */
+.embedded-holder.agent-driving {
+  animation: agent-ring 1.6s ease-in-out infinite;
+}
+@keyframes agent-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.55), 0 0 16px 3px rgba(34, 197, 94, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2), 0 0 30px 8px rgba(34, 197, 94, 0.6);
+  }
+}
+/* 需要人工操作：红色光圈爆闪（登录/滑块等，Agent 已暂停等待） */
+.embedded-holder.human-needed {
+  animation: human-ring 0.9s ease-in-out infinite;
+}
+@keyframes human-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7), 0 0 20px 4px rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.25), 0 0 40px 10px rgba(239, 68, 68, 0.75);
+  }
+}
+/* Agent 操控提示角标（工具条右侧，原生视图盖不到的区域） */
+.agent-driving-tag {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  color: #16a34a;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  animation: agent-ring-soft 1.6s ease-in-out infinite;
+}
+.agent-driving-tag .pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: agent-dot 1s ease-in-out infinite;
+}
+@keyframes agent-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(0.7);
+  }
+}
+@keyframes agent-ring-soft {
+  0%,
+  100% {
+    box-shadow: 0 0 4px 0 rgba(34, 197, 94, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 10px 2px rgba(34, 197, 94, 0.7);
+  }
+}
+/* 需要人工操作：角标红色爆闪（danger 变体） */
+.agent-driving-tag.danger {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #dc2626;
+  animation: human-tag 0.9s ease-in-out infinite;
+}
+.agent-driving-tag.danger .pulse-dot {
+  background: #ef4444;
+  animation: agent-dot 0.45s ease-in-out infinite;
+}
+@keyframes human-tag {
+  0%,
+  100% {
+    box-shadow: 0 0 5px 0 rgba(239, 68, 68, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 14px 3px rgba(239, 68, 68, 0.85);
+  }
+}
+.embedded-holder-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  color: var(--text-faint);
+  pointer-events: none;
+}
+.embedded-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px;
+  text-align: center;
+  color: var(--text-faint);
+}
+.embedded-empty-title {
+  font-size: 15px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+.embedded-empty-sub {
+  font-size: 12.5px;
+  line-height: 2;
+  max-width: 460px;
+}

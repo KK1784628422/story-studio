@@ -1,0 +1,16 @@
+diff --git a/app.js b/app.js
+deleted file mode 100644
+index 1c662e007ab04678955331b74e1ce3021859af80..0000000000000000000000000000000000000000
+diff --git a/server.js b/server.js
+index 7976a4f80d3614a935c218eb63fb5073c03f4634..8ff0404b6709009a3084c96a7980012b56c702e1 100644
+--- a/server.js
++++ b/server.js
+@@ -238,7 +238,7 @@ async function consturctServer(moduleDefs) {
+           }
+           return request(...obj)
+         })
+-        console.log('[OK]', decode(req.originalUrl))
++        // patched(story-studio): 静音逐请求日志——原行会打印完整 URL（含登录 cookie），刷屏且泄露凭据
+ 
+         const cookies = moduleResponse.cookie
+         if (!query.noCookie) {

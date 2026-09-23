@@ -1,0 +1,480 @@
+/* ═══ 29b 执行画布（Agentic Workflow 节点画布风格 · React Flow） ═══════════
+   工作流视图 = 章节轨道 + 执行画布；画布内节点/连线状态：
+   running=绿描边呼吸 / error=绯红 / done=定格 ✓；连线按工具类别着色。 */
+
+/* ── 容器：接管工作流视图布局（28-workbench 的窄栏版本在此覆盖） ── */
+.wf-panel {
+  max-width: 980px;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.wf-canvas {
+  position: relative;
+  isolation: isolate; /* 把 React Flow 内部 z-index 关进独立层叠上下文——日志面板等浮层永远在上 */
+  flex: 1;
+  min-height: 320px;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wf-canvas > .wf-idle-hint {
+  margin-top: 0;
+}
+.wf-canvas .ecn-wrap {
+  width: 100%;
+  height: 100%;
+}
+.ecn-flow {
+  --ec-node-bg: var(--bg-raised, var(--bg-soft));
+  --ec-border: var(--border-strong);
+  --ec-text: var(--text);
+  --ec-dim: var(--text-dim);
+  background: transparent;
+}
+
+/* React Flow 控件主题化 */
+.ecn-flow .react-flow__controls {
+  box-shadow: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.ecn-flow .react-flow__controls-button {
+  background: var(--bg-raised, var(--bg-soft));
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 26px;
+  height: 26px;
+}
+.ecn-flow .react-flow__controls-button:hover {
+  background: var(--bg-soft);
+  color: var(--text);
+}
+.ecn-flow .react-flow__controls-button svg {
+  fill: currentColor;
+}
+.ecn-flow .react-flow__minimap {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-soft) !important;
+}
+
+/* ── 节点卡（Start / 思考 / 工具） ── */
+.ecn-node {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  min-height: 84px;
+  border-radius: 14px;
+  border: 1.5px solid var(--ec-border);
+  background: var(--ec-node-bg);
+  color: var(--ec-text);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+  font-size: 13px;
+}
+/* 宽度与画布布局常量对齐（ExecutionCanvas TOOL_W/THINK_W/START_W） */
+.ecn-start {
+  width: 260px;
+}
+.ecn-think {
+  width: 400px;
+}
+.ecn-tool {
+  width: 260px;
+}
+
+/* 连线：全线虚线流动动画（参考 EnterpriseAIPipeline 的流动管线感） */
+.ecn-flow .ecn-edge-path {
+  animation: ecn-dash 0.9s linear infinite;
+}
+@keyframes ecn-dash {
+  to {
+    stroke-dashoffset: -8;
+  }
+}
+
+/* Handle 端口：连线必需，但视觉隐藏（左右入出） */
+.ecn-flow .react-flow__handle {
+  width: 7px;
+  height: 7px;
+  border: none;
+  background: var(--border-strong);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 图标瓷片：工具专属色（inline color）+ 同色低透明底 */
+.ecn-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  background: color-mix(in srgb, currentColor 16%, transparent);
+}
+.ecn-tile.start {
+  background: rgba(34, 197, 94, 0.18);
+  color: #22c55e;
+}
+
+.ecn-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.ecn-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.ecn-summary {
+  font-style: normal;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ec-dim);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-all;
+}
+.ecn-chip {
+  align-self: flex-start;
+  font-size: 10.5px;
+  font-family: var(--font-mono);
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--ec-dim);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 状态徽标 */
+.ecn-state {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 50%;
+  color: var(--ec-dim);
+}
+.ecn-tool.done .ecn-state {
+  color: #22c55e;
+}
+.ecn-tool.error .ecn-state {
+  color: #ef4444;
+}
+.ecn-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: ecn-breathe 1.2s ease-in-out infinite;
+}
+@keyframes ecn-breathe {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.72);
+  }
+}
+
+/* 序号角标 */
+.ecn-seq {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9.5px;
+  font-family: var(--font-mono);
+  border-radius: 999px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  color: var(--ec-dim);
+}
+.ecn-node {
+  position: relative;
+}
+
+/* 运行中：绿描边 + 顶部光带 + 大辉光呼吸（ComfyUI/节点画布点亮语义） */
+.ecn-tool.running {
+  border-color: rgba(34, 197, 94, 0.9);
+  background: color-mix(in srgb, #22c55e 8%, var(--ec-node-bg));
+  animation: ecn-ring 1.5s ease-in-out infinite;
+}
+@keyframes ecn-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5), 0 0 18px 2px rgba(34, 197, 94, 0.25), 0 4px 14px rgba(0, 0, 0, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.14), 0 0 30px 8px rgba(34, 197, 94, 0.4), 0 4px 14px rgba(0, 0, 0, 0.18);
+  }
+}
+/* 顶部光带（参考 LLM AGENT 节点顶边高光线） */
+.ecn-beam {
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, #22c55e, transparent);
+  animation: ecn-beam 1.5s ease-in-out infinite;
+}
+@keyframes ecn-beam {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+/* 运行状态文字（三脉冲点 + 「执行中…」） */
+.ecn-running-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #22c55e;
+  margin-top: 1px;
+}
+.ecn-start.running {
+  border-color: rgba(34, 197, 94, 0.7);
+  animation: ecn-ring 1.5s ease-in-out infinite;
+}
+
+/* 出错：绯红描边（瓷片色保持工具专属色） */
+.ecn-tool.error {
+  border-color: rgba(239, 68, 68, 0.7);
+}
+
+/* ── 思考大框：紫调虚线框（每条 assistant 消息的思考正文前 160 字） ── */
+.ecn-think {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+  border-style: dashed;
+  border-color: rgba(167, 139, 250, 0.55);
+  background: color-mix(in srgb, #a78bfa 7%, var(--ec-node-bg));
+}
+.ecn-think-tag {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #a78bfa;
+  border: 1px solid rgba(167, 139, 250, 0.5);
+  border-radius: 4px;
+  padding: 0 5px;
+}
+.ecn-think-text {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ec-dim);
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── 管线卡外壳（参考 EnterpriseAIPipeline：LIVE 头部 + 画布 + 终端日志行 + 统计脚注） ── */
+.ecn-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.ecn-card-head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.ecn-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: ecn-live 2s ease-in-out infinite;
+}
+@keyframes ecn-live {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+.ecn-card-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+.ecn-card-meta {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+}
+.ecn-card-body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+.ecn-card-log {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  height: 40px;
+  padding: 9px 16px;
+  border-top: 1px solid var(--border);
+  overflow: hidden;
+  animation: ecn-log-in 0.25s ease;
+}
+@keyframes ecn-log-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.ecn-log-caret {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--gold);
+}
+.ecn-log-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ecn-card-foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 9px 16px 10px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.ecn-kv,
+.ecn-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ecn-kv i,
+.ecn-stack i {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.09em;
+  color: var(--text-faint);
+}
+.ecn-kv b {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+.ecn-stack {
+  margin-left: auto;
+  text-align: right;
+}
+.ecn-stack b {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--gold);
+}
+
+/* 三脉冲点（活动节点状态位，参考 LLM AGENT 节点的 Processing 三点） */
+.ecn-trio {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+.ecn-trio i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: ecn-breathe 1.2s ease-in-out infinite;
+}
+
+/* ── 减弱动态 ── */
+@media (prefers-reduced-motion: reduce) {
+  .ecn-tool.running,
+  .ecn-start.running,
+  .ecn-pulse,
+  .ecn-trio i,
+  .ecn-live-dot,
+  .ecn-beam,
+  .ecn-flow .ecn-edge-path {
+    animation: none;
+  }
+}

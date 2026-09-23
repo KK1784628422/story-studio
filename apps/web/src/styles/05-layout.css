@@ -1,0 +1,186 @@
+/* ── 05 主布局 ───────────────────────────────────────────────── */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 40% 60%;
+}
+
+.layout-chat,
+.layout-panel {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.layout-chat {
+  border-right: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.layout-panel {
+  background: var(--bg);
+}
+
+/* ── 全页面动态背景层（设置中心「外观 · 动态背景」上传 ≤30M MP4）────────── */
+/* fixed 铺满视口、z-index:-1 落所有内容之后；overflow 外扩 40px 吸收 blur 边缘羽化。
+   body/根/.app 在背景启用时背景透明，视频层才得以透出。 */
+.bg-layer {
+  position: fixed;
+  inset: -40px;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bg-layer video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(28px) saturate(1.05);
+  transform: scale(1.08); /* blur 边缘羽化进一步内收，不留白边 */
+}
+.bg-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--bg) 32%, transparent); /* 主题色轻罩：浅/深主题都保证文字对比度 */
+}
+/* 背景启用时：body/根/.app 背景让位给视频层，主要面板半透明化——壁纸透出整个页面。
+   半透明度兼顾可读性：结构框架（顶栏/状态栏/活动栏）约 55% 底色，内容双栏约 55%；
+   卡片/弹层（--bg-raised 等）保持不透明，作为浮层不受影响 */
+body:has(.bg-layer),
+body:has(.bg-layer) #root,
+body:has(.bg-layer) .app {
+  background: transparent;
+}
+body:has(.bg-layer) .topbar {
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+body:has(.bg-layer) .status-bar {
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+body:has(.bg-layer) .activitybar {
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+body:has(.bg-layer) .layout-panel {
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+body:has(.bg-layer) .layout-chat {
+  background: color-mix(in srgb, var(--bg-soft) 45%, transparent);
+}
+/* 双侧窄栏（活动栏展开列表 / 资源管理器）同为实心底，一并半透明 */
+body:has(.bg-layer) .sidepanel,
+body:has(.bg-layer) .explorer {
+  background: color-mix(in srgb, var(--bg-soft) 55%, transparent);
+}
+/* 可视化工作区：容器原为不透明 radial+bg（壁纸在此被完全挡住），页签条/阅读器/编辑器头同为实底。
+   阅读器容器透明后，正文纸面（.vp-* 纸色）仍保持实体浮在壁纸上 */
+body:has(.bg-layer) .work-panel {
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+body:has(.bg-layer) .wp-tabs,
+body:has(.bg-layer) .reader-top,
+body:has(.bg-layer) .editor-head,
+body:has(.bg-layer) .brow-tabs {
+  background: color-mix(in srgb, var(--bg-soft) 55%, transparent);
+}
+body:has(.bg-layer) .reader {
+  background: transparent;
+}
+body:has(.bg-layer) .welcome {
+  background: transparent;
+}
+
+/* ── 设置中心「外观 · 动态背景」卡片 ─────────────────────────── */
+.bg-settings {
+  margin-top: 16px;
+  padding: 14px 16px 16px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+}
+.bg-settings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.bg-settings-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.bg-settings-title b {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.bg-settings-title i {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+/* 预览窗：小比例宽幅，圆角同输入栏风；未设置时占位提示 */
+.bg-preview {
+  margin-top: 12px;
+  height: 120px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: rgba(128, 128, 128, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.bg-preview.on {
+  border-style: solid;
+}
+.bg-preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px);
+  transform: scale(1.1);
+}
+.bg-preview-empty {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+.bg-settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+/* 虚化程度滑杆行 */
+.bg-set-blur {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.bg-set-blur input[type='range'] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+.bg-set-blur-val {
+  min-width: 38px;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+.bg-settings-hint {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+.bg-settings-err {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--accent);
+}

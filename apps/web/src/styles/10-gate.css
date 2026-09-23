@@ -1,0 +1,147 @@
+/* ── 10 门禁停靠卡 ───────────────────────────────────────────── */
+.gate-stop {
+  flex-shrink: 0;
+  margin: 0 14px 8px;
+  border-radius: var(--r-lg);
+  padding: 11px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  animation: drawer-drop var(--t-med) var(--ease);
+}
+.gate-stop.soft {
+  border: 1px solid rgba(217, 154, 61, 0.4);
+  background: linear-gradient(180deg, var(--warn-soft), transparent 140%);
+}
+.gate-stop.hard {
+  border: 1px solid rgba(242, 85, 73, 0.5);
+  background: linear-gradient(180deg, var(--bad-soft), transparent 140%);
+  box-shadow: 0 4px 24px -6px rgba(242, 85, 73, 0.25);
+}
+
+.gs-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+.gs-icon {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+.gs-ico-hard {
+  color: var(--bad);
+}
+.gs-ico-soft {
+  color: var(--warn);
+}
+
+.gs-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.gate-stop.hard .gs-title {
+  color: var(--bad);
+}
+.gate-stop.soft .gs-title {
+  color: var(--warn);
+}
+
+.gs-toggle,
+.gs-dismiss {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--text-faint);
+  font-size: 11.5px;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: var(--r-sm);
+  flex: none;
+  transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.gs-toggle:hover,
+.gs-dismiss:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gs-report {
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gs-script {
+  margin: 0;
+}
+.gs-script-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--bad);
+  margin-bottom: 4px;
+}
+.gs-script pre {
+  margin: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 9px 11px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-dim);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.gs-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-rollback {
+  appearance: none;
+  border: 1px solid rgba(242, 85, 73, 0.5);
+  background: var(--bad-soft);
+  color: var(--bad);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: transform var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.btn-rollback:hover {
+  background: rgba(242, 85, 73, 0.22);
+}
+.btn-rollback:active {
+  transform: scale(0.96);
+}
+.btn-rollback:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gs-hint {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.gate-stop.hard .gs-hint {
+  color: var(--text-dim);
+}
+
+.gs-result {
+  font-size: 12px;
+  color: var(--ok);
+}

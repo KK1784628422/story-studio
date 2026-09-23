@@ -1,0 +1,341 @@
+/* ── 02b 顶栏动态胶囊（居中悬浮：Agent 状态 | 模式切换 | 正在播放） ──────────────
+   与"墨岛"方案相反，胶囊颜色全部走主题变量（--bg-raised / --border-strong / --text…），
+   四套主题（深夜书房 / 宣纸白昼 / 纯白 / 极光黑）各自成色，不写死深色。 */
+
+.top-capsule {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+  z-index: 46;
+  display: flex;
+  align-items: center;
+  height: 34px;
+  padding: 0 6px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  box-shadow: var(--shadow-2);
+  color: var(--text);
+  user-select: none;
+  transition: box-shadow var(--t-med) var(--ease), border-color var(--t-med) var(--ease);
+}
+/* 桌面壳：顶栏整体是拖拽区，胶囊（含下拉抽屉）必须排除 */
+body.desktop-titlebar .top-capsule {
+  -webkit-app-region: no-drag;
+}
+/* Agent 工作中：胶囊边缘泛起状态色微光（静态晕，随 --tc-dot 换色）；待命时收回 */
+.top-capsule:not(.at-ease) {
+  border-color: color-mix(in srgb, var(--tc-glow, var(--gold)) 45%, var(--border-strong));
+  box-shadow: 0 0 14px -4px var(--tc-glow, var(--gold)), var(--shadow-2);
+}
+
+/* Agent 自动切模式：整囊呼吸一次 */
+.top-capsule.flash {
+  animation: tc-breathe 0.75s var(--ease);
+}
+@keyframes tc-breathe {
+  0% { box-shadow: 0 0 0 0 rgba(208, 167, 90, 0); }
+  35% { box-shadow: 0 0 0 4px rgba(208, 167, 90, 0.4), var(--shadow-2); transform: translateX(-50%) scale(1.03); }
+  100% { box-shadow: 0 0 0 0 rgba(208, 167, 90, 0), var(--shadow-2); transform: translateX(-50%) scale(1); }
+}
+
+/* 段间分隔线 */
+.tc-sep {
+  flex: none;
+  width: 1px;
+  height: 16px;
+  margin: 0 4px;
+  background: var(--border-strong);
+  opacity: 0.7;
+}
+
+/* ── Agent 段（宠物 13 态同源） ─────────────────────────────── */
+.tc-agent {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px 0 14px;
+  height: 100%;
+  min-width: 0;
+}
+.tc-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tc-dot, var(--ok));
+  box-shadow: 0 0 6px -1px var(--tc-dot, var(--ok));
+  transition: background var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease);
+}
+.tc-dot.running {
+  animation: tc-pulse 1.1s ease-in-out infinite;
+}
+.tc-dot.bad {
+  animation: none;
+}
+@keyframes tc-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.82); }
+}
+.tc-agent-text {
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  animation: tc-text-in 0.28s var(--ease);
+}
+.tc-timer {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  min-width: 30px;
+}
+@keyframes tc-text-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 模式段（下拉切换） ────────────────────────────────────── */
+.tc-mode-wrap {
+  position: relative;
+  height: 100%;
+}
+.tc-mode {
+  appearance: none;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding: 0 10px;
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 12.5px;
+  font-family: inherit;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.tc-mode:hover {
+  background: var(--gold-soft);
+}
+.tc-mode .icon {
+  color: var(--accent);
+}
+.tc-mode-text {
+  animation: tc-text-in 0.28s var(--ease);
+}
+.tc-chevron {
+  color: var(--text-faint);
+  transition: transform 0.2s var(--ease);
+}
+.tc-chevron.up {
+  transform: rotate(180deg);
+}
+/* 抽屉：grid-rows 0fr→1fr 高度过渡，向下弹出盖在工作区上 */
+.tc-drawer {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 10px);
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 316px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-3);
+  overflow: visible;
+  transition: grid-template-rows 0.28s var(--ease), opacity 0.2s var(--ease);
+  opacity: 0;
+  pointer-events: none;
+}
+.tc-drawer.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  pointer-events: auto;
+}
+.tc-drawer-clip {
+  overflow: hidden;
+  min-height: 0;
+}
+.tc-drawer-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+}
+.tc-item {
+  appearance: none;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: var(--r-md);
+  color: var(--text-dim);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.tc-item:hover {
+  background: rgba(128, 128, 128, 0.12);
+  color: var(--text);
+}
+.tc-item.on {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+.tc-item .icon {
+  flex: none;
+}
+.tc-item-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.tc-item-text b {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.tc-item-text i {
+  font-style: normal;
+  font-size: 10.5px;
+  color: var(--text-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tc-item.on .tc-item-text i {
+  color: var(--text-dim);
+}
+.tc-check {
+  color: var(--gold);
+}
+
+/* ── 音乐段（正在播放 / 引导配置） ──────────────────────────── */
+.tc-music {
+  appearance: none;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 100%;
+  padding: 0 14px 0 10px;
+  border-radius: 999px;
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease);
+}
+.tc-music:hover {
+  background: var(--gold-soft);
+}
+.tc-music .icon {
+  color: var(--text-faint);
+}
+.tc-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 12px;
+}
+.tc-eq i {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--gold);
+  transform-origin: bottom;
+  animation: tc-eq 0.9s ease-in-out infinite;
+}
+.tc-eq i:nth-child(2) {
+  animation-delay: 0.22s;
+}
+.tc-eq i:nth-child(3) {
+  animation-delay: 0.44s;
+}
+@keyframes tc-eq {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+.tc-music-text {
+  font-size: 12px;
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color var(--t-fast) var(--ease);
+}
+.tc-music:not(:hover) .tc-music-text {
+  color: var(--text-dim);
+}
+.tc-music.unconfigured .tc-music-text {
+  color: var(--text-faint);
+}
+/* 当前歌词行（歌名旁；随播放进度同步，悬停 title 可看翻译）。
+   宽度固定：胶囊整体是 left:50% 居中悬浮，若随歌词行长伸缩，整条胶囊会跟着重新居中而左右晃动 */
+.tc-lyric {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-faint);
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tc-lyric::before {
+  content: '·';
+  margin-right: 7px;
+  font-style: normal;
+}
+
+/* ── 响应式：窄窗逐级收纳 ──────────────────────────────────── */
+@media (max-width: 1440px) {
+  .tc-timer {
+    display: none;
+  }
+}
+@media (max-width: 1280px) {
+  .tc-agent-text {
+    display: none;
+  }
+  .tc-agent {
+    padding-right: 4px;
+  }
+  .tc-music-text {
+    max-width: 120px;
+  }
+  .tc-lyric {
+    width: 140px;
+  }
+  .book-name {
+    max-width: 130px;
+  }
+}
+@media (max-width: 1101px) {
+  .tc-music-text {
+    display: none;
+  }
+  .tc-lyric {
+    display: none;
+  }
+  .tc-music {
+    padding-right: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tc-dot.running,
+  .tc-eq i,
+  .tc-agent-text,
+  .tc-mode-text,
+  .top-capsule.flash {
+    animation: none;
+  }
+}

@@ -1,0 +1,18 @@
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  agent-browser: true
+  electron: true
+  esbuild: true
+
+onlyBuiltDependencies:
+  - esbuild
+  - agent-browser
+  - electron
+
+patchedDependencies:
+  NeteaseCloudMusicApi@4.32.0: patches/NeteaseCloudMusicApi@4.32.0.patch
+
+verifyDepsBeforeRun: false
