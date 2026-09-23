@@ -67,6 +67,10 @@ pnpm build              # build the frontend
 pnpm dev                # http://127.0.0.1:8100
 ```
 
+> 🔑 **This repository ships no API keys, accounts or credentials.** Every model key, music
+> platform login and web-AI account is supplied by the user. The service starts without a key
+> configured; it will simply ask you to set one before you can chat.
+
 The welcome screen asks you to pick or create a *book workspace* directory before entering.
 
 For frontend work, run `pnpm dev` and `pnpm dev:web` in two terminals (Vite HMR on 5173).
@@ -80,7 +84,8 @@ scraping and web-AI image generation inside the app and never touches your syste
 Skills are where the writing methodology lives. Two directories are loaded, with `local/`
 shadowing `vendor/` on name collisions.
 
-`packages/skills/vendor/` bundles 13 skills from **oh-story-claudecode** (ranking scrapers,
+`packages/skills/vendor/` bundles 13 skills from
+**[oh-story-claudecode](https://github.com/zenstory-ai/oh-story-claudecode)** (ranking scrapers,
 book deconstruction, long/short-form writing, de-AI-flavouring, cover art, import, review,
 routing). That portion is distributed under the **MIT License**, copyright its original authors;
 the original license text is at [`packages/skills/vendor/LICENSE`](packages/skills/vendor/LICENSE).

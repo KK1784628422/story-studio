@@ -1,12 +1,17 @@
 /**
  * Edge TTS 客户端（TS 移植自 novel-reader 的 EdgeTtsService.java）：
  * 复刻微软 Edge「大声朗读」WSS 协议，Sec-MS-GEC 签名 + 时钟偏移校正 + mp3 磁盘缓存。
+ *
+ * 本文件不含任何私有凭据：下方的 TRUSTED_CLIENT_TOKEN 是微软 Edge 浏览器「大声朗读」
+ * 扩展内置的**公开固定值**（Chromium 扩展 id 同为此值），edge-tts 系开源移植普遍使用，
+ * 非本项目的账号或密钥。本仓库不附带任何 API key，模型端点与密钥一律由使用者自备。
  */
 import { createHash, randomUUID } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync, renameSync } from 'node:fs'
 import { join } from 'node:path'
 import WebSocket from 'ws'
 
+/** 微软 Edge 朗读扩展的公开常量（非私钥，见文件头说明） */
 const TRUSTED_CLIENT_TOKEN = '6A5AA1D4EAFF4E9FB37E23D68491D6F4'
 const CHROMIUM_VERSION = '143.0.3650.75'
 const WSS_URL = 'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1'

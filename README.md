@@ -113,10 +113,14 @@ pnpm dev:desktop
 
 ### 配置（`.env`）
 
+> 🔑 **本项目不附带任何 API key、账号或凭据。** 所有模型密钥、音乐平台登录态、
+> 网页 AI 站点账号一律由使用者自备；仓库内不含作者的任何配置。
+> 未配置 key 时服务能启动，但发消息会提示你去配置。
+
 | 变量 | 说明 |
 |---|---|
 | `STORY_STUDIO_MODEL_BASE_URL` | OpenAI 兼容端点，如 `https://api.deepseek.com/v1` |
-| `STORY_STUDIO_API_KEY` | 你的 API key |
+| `STORY_STUDIO_API_KEY` | **你自己的** API key |
 | `STORY_STUDIO_MODEL_ID` | 模型 ID |
 | `STORY_STUDIO_MODELS` | 输入栏可选模型（逗号分隔，第一个为默认） |
 | `STORY_STUDIO_WORKSPACE` | 书工作区目录（留空则启动后在欢迎页选择） |
@@ -128,15 +132,18 @@ pnpm dev:desktop
 
 `.env` 与 `.local/` 都已加入 `.gitignore`，**不要提交**。
 
+📖 **完整上手流程见 [使用教程](docs/使用教程.md)** —— 从装好到写完第一章的逐步指引。
+
 ---
 
 ## 技能包
 
 技能是这套工作台的方法论载体。运行时会加载两个目录：
 
-- `packages/skills/vendor/` —— 来自 **oh-story-claudecode** 的 13 个技能
-  （长篇/短篇的扫榜、拆文、写作、去 AI 味、封面、导入、审稿、路由）。
-  这部分以 **MIT** 许可分发，原始许可证见 [`packages/skills/vendor/LICENSE`](packages/skills/vendor/LICENSE)。
+- `packages/skills/vendor/` —— 来自 [zenstory-ai/oh-story-claudecode](https://github.com/zenstory-ai/oh-story-claudecode)
+  的 13 个技能（长篇/短篇的扫榜、拆文、写作、去 AI 味、封面、导入、审稿、路由）。
+  这部分以 **MIT** 许可分发，版权归原作者，原始许可证见
+  [`packages/skills/vendor/LICENSE`](packages/skills/vendor/LICENSE)。
 - `packages/skills/local/` —— 本项目自有的 7 个技能（同人衍生的拆书与编排、创作校准、
   网页 AI 头像生成流水线）。同名时 **local 覆盖 vendor**。
 

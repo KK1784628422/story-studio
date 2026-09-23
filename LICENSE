@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 Story Studio contributors
+Copyright (c) 2026 zhaozhikang
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,17 @@ SOFTWARE.
 
 ## 第三方组件 / Third-party components
 
-本仓库包含来自 **oh-story-claudecode** 的网文写作技能包（位于
-`packages/skills/vendor/`，13 个技能），该部分以 MIT 许可分发，
-原始许可证见 `packages/skills/vendor/LICENSE`。
+本仓库包含来自 **oh-story-claudecode**（https://github.com/zenstory-ai/oh-story-claudecode）
+的网文写作技能包（位于 `packages/skills/vendor/`，13 个技能），该部分以 MIT 许可分发，
+版权归其原作者，原始许可证见 `packages/skills/vendor/LICENSE`。
+
+本仓库不包含任何 API key、账号或登录凭据；模型端点与密钥由使用者自行提供。
 
 This repository bundles the **oh-story-claudecode** writing-skill pack
-(`packages/skills/vendor/`, 13 skills), distributed under the MIT License.
-See `packages/skills/vendor/LICENSE` for the original license text.
+(`packages/skills/vendor/`, 13 skills) from
+https://github.com/zenstory-ai/oh-story-claudecode, distributed under the MIT
+License, copyright its original authors. See `packages/skills/vendor/LICENSE`
+for the original license text.
+
+This repository ships no API keys, accounts or credentials; endpoints and keys
+are supplied by the user.
