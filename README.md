@@ -85,7 +85,7 @@ packages/
 ### 安装与运行
 
 ```bash
-git clone <this-repo> && cd story-studio
+git clone https://github.com/KK1784628422/story-studio.git && cd story-studio
 pnpm install
 
 cp .env.example .env    # 填入你的 API key 与端点

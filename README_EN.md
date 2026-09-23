@@ -60,7 +60,7 @@ packages/shared       Domain types shared by client and server
 Requires Node.js **>= 22** and pnpm.
 
 ```bash
-git clone <this-repo> && cd story-studio
+git clone https://github.com/KK1784628422/story-studio.git && cd story-studio
 pnpm install
 cp .env.example .env    # set your endpoint, API key and model id
 pnpm build              # build the frontend
